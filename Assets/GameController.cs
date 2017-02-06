@@ -38,6 +38,10 @@ public class GameController : MonoBehaviour {
         player1.SwitchTurns();
         player2.SwitchTurns();
         UpdateTurnIndicator();
+		if (CurrentPlayer ().IsAi ()) {
+			CurrentPlayer.HaveAiTurn();
+			EndCurrentTurn ();
+		}
     }
 
     private void UpdateTurnIndicator()

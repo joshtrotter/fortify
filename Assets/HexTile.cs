@@ -22,26 +22,23 @@ public class HexTile : MonoBehaviour {
 
     void OnMouseDown()
     {
-        if (Available())
-        {
-            ClaimForPlayer(gc.CurrentPlayer());
-            foreach (HexTile neighbour in neighbours)
-            {
-                neighbour.OnNeighbourChange(this);
-            }
-            gc.EndCurrentTurn();
-        } else if (CurrentOwner() == gc.CurrentPlayer() && Fortified() && allowMartyr)
-        {
-            Defortify();
-            foreach (HexTile neighbour in neighbours)
-            {
-                if (neighbour.CurrentOwner() != owner)
-                {
-                    neighbour.OnNeighbourChange(this);
-                }
-            }
-            gc.EndCurrentTurn();
-        }
+		if (!gc.CurrentPlayer ().IsAI ()) {
+			if (Available ()) {
+				ClaimForPlayer (gc.CurrentPlayer ());
+				foreach (HexTile neighbour in neighbours) {
+					neighbour.OnNeighbourChange (this);
+				}
+				gc.EndCurrentTurn ();
+			} else if (CurrentOwner () == gc.CurrentPlayer () && Fortified () && allowMartyr) {
+				Defortify ();
+				foreach (HexTile neighbour in neighbours) {
+					if (neighbour.CurrentOwner () != owner) {
+						neighbour.OnNeighbourChange (this);
+					}
+				}
+				gc.EndCurrentTurn ();
+			}
+		}
     }
 
     public void AddNeighbour(HexTile neighbour)
@@ -87,6 +84,11 @@ public class HexTile : MonoBehaviour {
     {
         return fortified;
     }
+
+	public HashSet<HexTile> Neighbours() 
+	{
+		return neighbours;
+	}
 
     private void FortifyOrFlipRules(HexTile changedTile)
     {
