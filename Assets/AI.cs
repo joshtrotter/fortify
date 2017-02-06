@@ -23,7 +23,7 @@ public class AI : MonoBehaviour {
 		//TODO deal with case where all tiles are scored zero or negative
 		float topScore = 0f;
 		HexTile topTile = null;
-		foreach (HexTile tile in tiles)
+		foreach (HexTile tile in board.Tiles())
 		{
 			float score = ScoreTile(tile);
 			if (score > topScore) {
@@ -53,7 +53,7 @@ public class AI : MonoBehaviour {
 		{
 			if (neighbour.Available()) {
 				claimableNeighbours++;
-				currentScore -= ValueOfClaimableNeighbour(neighbour);
+				currentScore -= ValueOfClaimableNeighbour(neighbour, tile);
 			} else if (neighbour.CurrentOwner() == player && !neighbour.Fortified()) {
 				//TODO the value placed on fortifying should depend on the possible value of a sacrifice
 				currentScore += valueOfFortifiableNeighbour;
@@ -117,6 +117,7 @@ public class AI : MonoBehaviour {
 				}
 			}
 		}
+        return score;
 	}
 
 }

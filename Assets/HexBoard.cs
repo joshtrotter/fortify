@@ -13,6 +13,11 @@ public class HexBoard : MonoBehaviour {
         ConfigureTileNeighbours();	
 	}
 
+    public List<HexTile> Tiles()
+    {
+        return tiles;
+    }
+
     private void ConfigureTileNeighbours()
     {
         foreach (HexTile tile in tiles)

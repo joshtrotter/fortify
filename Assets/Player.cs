@@ -37,14 +37,18 @@ public class Player : MonoBehaviour {
 		return ai;
 	}
 
-	public void HaveAiTurn()
+	public IEnumerator HaveAiTurn()
 	{
 		HexTile chosenTile = behaviour.ChooseTile();
-		if (chosenTile.Available ()) {
-			chosenTile.ClaimForPlayer(this);
+        chosenTile.GetComponent<SpriteRenderer>().color = Color.green;
+        yield return new WaitForSeconds(2f);
+
+        if (chosenTile.Available ()) {
+			chosenTile.Claim(this);
 		} else {
-			chosenTile.Fortify();
+			chosenTile.Sacrifice();
 		}
+        GameController.Instance().EndCurrentTurn();
 	}
 
 

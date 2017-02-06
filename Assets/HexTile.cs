@@ -5,7 +5,7 @@ using UnityEngine;
 public class HexTile : MonoBehaviour {
 
     public bool allowDefortify = true;
-    public bool allowMartyr = true;
+    public bool allowSacrifice = true;
 
     private GameController gc;
     private SpriteRenderer rend;
@@ -22,20 +22,12 @@ public class HexTile : MonoBehaviour {
 
     void OnMouseDown()
     {
-		if (!gc.CurrentPlayer ().IsAI ()) {
+		if (!gc.CurrentPlayer().IsAi()) {
 			if (Available ()) {
-				ClaimForPlayer (gc.CurrentPlayer ());
-				foreach (HexTile neighbour in neighbours) {
-					neighbour.OnNeighbourChange (this);
-				}
+				Claim (gc.CurrentPlayer ());				
 				gc.EndCurrentTurn ();
-			} else if (CurrentOwner () == gc.CurrentPlayer () && Fortified () && allowMartyr) {
-				Defortify ();
-				foreach (HexTile neighbour in neighbours) {
-					if (neighbour.CurrentOwner () != owner) {
-						neighbour.OnNeighbourChange (this);
-					}
-				}
+			} else if (CurrentOwner () == gc.CurrentPlayer () && Fortified () && allowSacrifice) {
+                Sacrifice();
 				gc.EndCurrentTurn ();
 			}
 		}
@@ -46,7 +38,16 @@ public class HexTile : MonoBehaviour {
         neighbours.Add(neighbour);
     }
 
-    public void ClaimForPlayer(Player player)
+    public void Claim(Player player)
+    {
+        ChangeOwner(player);
+        foreach (HexTile neighbour in neighbours)
+        {
+            neighbour.OnNeighbourChange(this);
+        }
+    }
+
+    public void ChangeOwner(Player player)
     {
         owner = player;
         rend.color = player.PlayerColor();
@@ -58,7 +59,20 @@ public class HexTile : MonoBehaviour {
         fortified = true;
     }
 
-    public void Defortify()
+    public void Sacrifice()
+    {
+        RemoveFortify();
+
+        foreach (HexTile neighbour in neighbours)
+        {
+            if (neighbour.CurrentOwner() != owner)
+            {
+                neighbour.OnNeighbourChange(this);
+            }
+        }
+    }
+
+    public void RemoveFortify()
     {
         rend.color = owner.PlayerColor();
         fortified = false;
@@ -101,10 +115,10 @@ public class HexTile : MonoBehaviour {
             {
                 if (!Fortified())
                 {
-                    ClaimForPlayer(changedTile.CurrentOwner());
+                    ChangeOwner(changedTile.CurrentOwner());
                 } else if (allowDefortify)
                 {
-                    Defortify();
+                    RemoveFortify();
                 }
             }
         }
@@ -133,7 +147,7 @@ public class HexTile : MonoBehaviour {
             }
             if (otherPlayerStrength > currentPlayerStrength)
             {
-                ClaimForPlayer(owner == gc.player1 ? gc.player2 : gc.player1);
+                ChangeOwner(owner == gc.player1 ? gc.player2 : gc.player1);
             }
         }
     }
