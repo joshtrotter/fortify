@@ -1,16 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Player : MonoBehaviour {
+public abstract class Player : MonoBehaviour {
 
-    public Color color;
-    public Color fortifyColor;
+    [SerializeField]
+    private Player opponent;
 
-	public bool ai;
-	public AI behaviour;
+    [SerializeField]
+    private Color color;
 
-    public bool isTurn;
+    [SerializeField]
+    private Color fortifyColor;
 
     public Color PlayerColor()
     {
@@ -22,34 +21,31 @@ public class Player : MonoBehaviour {
         return fortifyColor;
     }
 
-    public bool IsTurn()
+    public virtual void StartTurn()
     {
-        return isTurn;
+        GameController.Instance().turnIndicator.ChangeOwner(this);
     }
 
-    public void SwitchTurns()
+    public abstract void OnTileSelected(HexTile tile);
+
+    public virtual void EndTurn()
     {
-        isTurn = !isTurn;
+        opponent.StartTurn();
     }
 
-	public bool IsAi() 
-	{
-		return ai;
-	}
-
-	public IEnumerator HaveAiTurn()
-	{
-		HexTile chosenTile = behaviour.ChooseTile();
-        chosenTile.GetComponent<SpriteRenderer>().color = Color.green;
-        yield return new WaitForSeconds(2f);
-
-        if (chosenTile.Available ()) {
-			chosenTile.Claim(this);
-		} else {
-			chosenTile.Sacrifice();
-		}
-        GameController.Instance().EndCurrentTurn();
-	}
+    protected void PlayTile(HexTile tile)
+    {
+        if (tile.Available())
+        {
+            tile.Claim(this);
+        }
+        else
+        {
+            tile.Sacrifice();
+        }
+        EndTurn();
+    }
+    
 
 
 }

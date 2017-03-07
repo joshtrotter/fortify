@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class GameController : MonoBehaviour {
 
@@ -20,33 +18,12 @@ public class GameController : MonoBehaviour {
 
     private void Start()
     {
-        UpdateTurnIndicator();
+        player1.StartTurn();
     }
 
 	public static GameController Instance()
     {
         return INSTANCE;
-    }
-
-    public Player CurrentPlayer()
-    {
-        return player1.IsTurn() ? player1 : player2;
-    }
-
-    public void EndCurrentTurn()
-    {
-        player1.SwitchTurns();
-        player2.SwitchTurns();
-        UpdateTurnIndicator();
-		if (CurrentPlayer ().IsAi ()) {
-			StartCoroutine(CurrentPlayer().HaveAiTurn());
-		}
-    }
-
-    private void UpdateTurnIndicator()
-    {
-        turnIndicator.ChangeOwner(CurrentPlayer());
-    }
-	
+    }	
 	
 }

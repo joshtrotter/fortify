@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class AI : MonoBehaviour {
+public class AIStrategy : MonoBehaviour {
 
 	public float valueOfFortifiableNeighbour = 1.2f;
 	public float valueOfCapturableNeighbour = 1f;
@@ -18,7 +16,7 @@ public class AI : MonoBehaviour {
 	public Player player;
 	public HexBoard board;
 
-	public HexTile ChooseTile() 
+	public void ChooseTile() 
 	{
 		//TODO deal with case where all tiles are scored zero or negative
 		float topScore = 0f;
@@ -31,7 +29,8 @@ public class AI : MonoBehaviour {
 				topTile = tile;
 			}
 		}
-		return topTile;
+
+        player.OnTileSelected(topTile);
 	}
 
 	private float ScoreTile(HexTile tile)

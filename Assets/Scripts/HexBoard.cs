@@ -1,7 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
+// Scans all HexTiles that are children of the HexBoard and associates the tile with it's neighbours.
+// Allows new board layouts to be created in the editor without the need to manually configure neighbours on each tile.
 public class HexBoard : MonoBehaviour {
 
     private const float maxDistanceToNeighbour = 1.05f;

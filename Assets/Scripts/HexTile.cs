@@ -1,13 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class HexTile : MonoBehaviour {
 
-    public bool allowDefortify = true;
-    public bool allowSacrifice = true;
+    [SerializeField]
+    private HexTileSelectionObserver selectionObserver;
 
-    private GameController gc;
     private SpriteRenderer rend;
     private Player owner;
     private bool fortified;
@@ -16,21 +14,12 @@ public class HexTile : MonoBehaviour {
 
     void Start()
     {
-        gc = GameController.Instance();
         rend = gameObject.GetComponent<SpriteRenderer>();
     }
 
     void OnMouseDown()
     {
-		if (!gc.CurrentPlayer().IsAi()) {
-			if (Available ()) {
-				Claim (gc.CurrentPlayer ());				
-				gc.EndCurrentTurn ();
-			} else if (CurrentOwner () == gc.CurrentPlayer () && Fortified () && allowSacrifice) {
-                Sacrifice();
-				gc.EndCurrentTurn ();
-			}
-		}
+        selectionObserver.NotifyPlayerOfTileSelection(this);
     }
 
     public void AddNeighbour(HexTile neighbour)
@@ -116,7 +105,7 @@ public class HexTile : MonoBehaviour {
                 if (!Fortified())
                 {
                     ChangeOwner(changedTile.CurrentOwner());
-                } else if (allowDefortify)
+                } else
                 {
                     RemoveFortify();
                 }
@@ -124,31 +113,4 @@ public class HexTile : MonoBehaviour {
         }
     }
 
-    private void ConvertBasedOnNeighbourCountRules()
-    {
-        if (owner != null)
-        {
-            int currentPlayerStrength = 1;
-            int otherPlayerStrength = 0;
-            foreach (HexTile neighbour in neighbours)
-            {
-                Player neighbourOwner = neighbour.CurrentOwner();
-                if (neighbourOwner != null)
-                {
-                    if (neighbourOwner == owner)
-                    {
-                        currentPlayerStrength += 1;
-                    }
-                    else
-                    {
-                        otherPlayerStrength += 1;
-                    }
-                }
-            }
-            if (otherPlayerStrength > currentPlayerStrength)
-            {
-                ChangeOwner(owner == gc.player1 ? gc.player2 : gc.player1);
-            }
-        }
-    }
 }
