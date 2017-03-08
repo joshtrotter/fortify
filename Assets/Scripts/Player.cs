@@ -3,6 +3,9 @@
 public abstract class Player : MonoBehaviour {
 
     [SerializeField]
+    private ActionRuleSet actionRuleSet;
+
+    [SerializeField]
     private Player opponent;
 
     [SerializeField]
@@ -30,14 +33,7 @@ public abstract class Player : MonoBehaviour {
 
     protected void PlayTile(HexTile tile)
     {
-        if (tile.Available())
-        {
-            Claim(tile);
-        }
-        else
-        {
-            Sacrifice(tile);
-        }
+        actionRuleSet.PlayTile(this, tile);
         EndTurn();
     }
 
@@ -46,52 +42,9 @@ public abstract class Player : MonoBehaviour {
         opponent.StartTurn();
     }
 
-    public void Claim(HexTile tile)
+    public Player Opponent()
     {
-        tile.Claim(this);
-        foreach (HexTile neighbour in tile.Neighbours())
-        {
-            if (neighbour.CurrentOwner() == this)
-            {
-                InfluenceAllyTile(neighbour);
-            }
-            else if (neighbour.CurrentOwner() == opponent)
-            {
-                InfluenceOpponentTile(neighbour);
-            }
-        }
+        return opponent;
     }
-
-    public void Sacrifice(HexTile tile)
-    {
-        tile.RemoveFortify();
-
-        foreach (HexTile neighbour in tile.Neighbours())
-        {
-            if (neighbour.CurrentOwner() == opponent)
-            {
-                InfluenceOpponentTile(neighbour);
-            }
-        }
-    }
-
-    private void InfluenceAllyTile(HexTile ally)
-    {
-        if (ally.Claimed())
-        {
-            ally.ApplyMinorFortify();
-        }
-    }
-
-    private void InfluenceOpponentTile(HexTile opponent)
-    {
-        if (opponent.Claimed())
-        {
-            opponent.Claim(this);
-        } else if (opponent.FortifiedMinor())
-        {
-            opponent.RemoveFortify();
-        }
-    }   
 
 }
