@@ -23,29 +23,75 @@ public abstract class Player : MonoBehaviour {
 
     public virtual void StartTurn()
     {
-        GameController.Instance().turnIndicator.ChangeOwner(this);
+        GameController.Instance().turnIndicator.Claim(this);
     }
 
     public abstract void OnTileSelected(HexTile tile);
+
+    protected void PlayTile(HexTile tile)
+    {
+        if (tile.Available())
+        {
+            Claim(tile);
+        }
+        else
+        {
+            Sacrifice(tile);
+        }
+        EndTurn();
+    }
 
     public virtual void EndTurn()
     {
         opponent.StartTurn();
     }
 
-    protected void PlayTile(HexTile tile)
+    public void Claim(HexTile tile)
     {
-        if (tile.Available())
+        tile.Claim(this);
+        foreach (HexTile neighbour in tile.Neighbours())
         {
-            tile.Claim(this);
+            if (neighbour.CurrentOwner() == this)
+            {
+                InfluenceAllyTile(neighbour);
+            }
+            else if (neighbour.CurrentOwner() == opponent)
+            {
+                InfluenceOpponentTile(neighbour);
+            }
         }
-        else
-        {
-            tile.Sacrifice();
-        }
-        EndTurn();
     }
-    
 
+    public void Sacrifice(HexTile tile)
+    {
+        tile.RemoveFortify();
+
+        foreach (HexTile neighbour in tile.Neighbours())
+        {
+            if (neighbour.CurrentOwner() == opponent)
+            {
+                InfluenceOpponentTile(neighbour);
+            }
+        }
+    }
+
+    private void InfluenceAllyTile(HexTile ally)
+    {
+        if (ally.Claimed())
+        {
+            ally.ApplyMinorFortify();
+        }
+    }
+
+    private void InfluenceOpponentTile(HexTile opponent)
+    {
+        if (opponent.Claimed())
+        {
+            opponent.Claim(this);
+        } else if (opponent.FortifiedMinor())
+        {
+            opponent.RemoveFortify();
+        }
+    }   
 
 }

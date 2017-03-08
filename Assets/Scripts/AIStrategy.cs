@@ -37,7 +37,7 @@ public class AIStrategy : MonoBehaviour {
 	{
 		if (tile.Available ()) {
 			return ScoreClaimableTile (tile);
-		} else if (tile.Fortified() && tile.CurrentOwner() == player) {
+		} else if (tile.FortifiedMinor() && tile.CurrentOwner() == player) {
 			return ScoreFortifiedTile(tile);
 		}
 		return 0f;
@@ -53,13 +53,13 @@ public class AIStrategy : MonoBehaviour {
 			if (neighbour.Available()) {
 				claimableNeighbours++;
 				currentScore -= ValueOfClaimableNeighbour(neighbour, tile);
-			} else if (neighbour.CurrentOwner() == player && !neighbour.Fortified()) {
+			} else if (neighbour.CurrentOwner() == player && !neighbour.FortifiedMinor()) {
 				//TODO the value placed on fortifying should depend on the possible value of a sacrifice
 				currentScore += valueOfFortifiableNeighbour;
-			} else if (neighbour.CurrentOwner() != player && neighbour.Fortified()) {
+			} else if (neighbour.CurrentOwner() != player && neighbour.FortifiedMinor()) {
 				//TODO the value placed on defortifying should depend on the possible value of a sacrifice
 				currentScore += valueOfDefortifiableNeighbour;
-			} else if (neighbour.CurrentOwner() != player && !neighbour.Fortified()) {
+			} else if (neighbour.CurrentOwner() != player && !neighbour.FortifiedMinor()) {
 				currentScore += valueOfCapturableNeighbour;
 			}
 		}
@@ -91,7 +91,7 @@ public class AIStrategy : MonoBehaviour {
 				if (neighbourOfNeighbour.CurrentOwner() == player) {
 					//If we own it then the other player would like to capture / defortify it
 					neighbourValue++;
-				} else if (!neighbourOfNeighbour.Fortified()) {
+				} else if (!neighbourOfNeighbour.FortifiedMinor()) {
 					//If they own it but it isn't fortified then they would like to fortify it
 					neighbourValue++;
 				}
@@ -108,7 +108,7 @@ public class AIStrategy : MonoBehaviour {
 		foreach (HexTile neighbour in tile.Neighbours()) 
 		{
 			if (!neighbour.Available() && neighbour.CurrentOwner() != player) {
-				if (neighbour.Fortified()) 
+				if (neighbour.FortifiedMinor()) 
 				{
 					score += valueOfDefortifiableNeighbour;
 				} else {

@@ -3,18 +3,20 @@ using UnityEngine;
 
 public class HexTile : MonoBehaviour {
 
+    private enum TileState { AVAILABLE, CLAIMED, FORTIFIED_MINOR, FORTIFIED_MAJOR };
+
     [SerializeField]
     private HexTileSelectionObserver selectionObserver;
 
     private SpriteRenderer rend;
     private Player owner;
-    private bool fortified;
-
+    private TileState currentState;
     private HashSet<HexTile> neighbours = new HashSet<HexTile>();
 
     void Start()
     {
         rend = gameObject.GetComponent<SpriteRenderer>();
+        currentState = TileState.AVAILABLE;
     }
 
     void OnMouseDown()
@@ -22,55 +24,49 @@ public class HexTile : MonoBehaviour {
         selectionObserver.NotifyPlayerOfTileSelection(this);
     }
 
-    public void AddNeighbour(HexTile neighbour)
-    {
-        neighbours.Add(neighbour);
-    }
-
     public void Claim(Player player)
     {
-        ChangeOwner(player);
-        foreach (HexTile neighbour in neighbours)
-        {
-            neighbour.OnNeighbourChange(this);
-        }
-    }
-
-    public void ChangeOwner(Player player)
-    {
         owner = player;
+        currentState = TileState.CLAIMED;
         rend.color = player.PlayerColor();
     }
 
-    public void Fortify()
+    public void ApplyMinorFortify()
     {
+        currentState = TileState.FORTIFIED_MINOR;
         rend.color = owner.FortifyColor();
-        fortified = true;
     }
 
-    public void Sacrifice()
+    public void ApplyMajorFortify()
     {
-        RemoveFortify();
-
-        foreach (HexTile neighbour in neighbours)
-        {
-            if (neighbour.CurrentOwner() != owner)
-            {
-                neighbour.OnNeighbourChange(this);
-            }
-        }
+        currentState = TileState.FORTIFIED_MAJOR;
+        rend.color = owner.FortifyColor();
     }
 
     public void RemoveFortify()
     {
+        currentState = TileState.CLAIMED;
         rend.color = owner.PlayerColor();
-        fortified = false;
     }
 
-    //This is where the core game rules can be changed around
-    public void OnNeighbourChange(HexTile changedTile)
+    public bool Available()
     {
-        FortifyOrFlipRules(changedTile);
+        return currentState == TileState.AVAILABLE;
+    }
+
+    public bool Claimed()
+    {
+        return currentState == TileState.CLAIMED;
+    }
+
+    public bool FortifiedMinor()
+    {
+        return currentState == TileState.FORTIFIED_MINOR;
+    }
+
+    public bool FortifiedMajor()
+    {
+        return currentState == TileState.FORTIFIED_MAJOR;
     }
 
     public Player CurrentOwner()
@@ -78,39 +74,14 @@ public class HexTile : MonoBehaviour {
         return owner;
     }
 
-    public bool Available()
+    public void AddNeighbour(HexTile neighbour)
     {
-        return owner == null;
+        neighbours.Add(neighbour);
     }
 
-    public bool Fortified()
+    public HashSet<HexTile> Neighbours()
     {
-        return fortified;
-    }
-
-	public HashSet<HexTile> Neighbours() 
-	{
-		return neighbours;
-	}
-
-    private void FortifyOrFlipRules(HexTile changedTile)
-    {
-        if (owner != null)
-        {
-            if (owner == changedTile.CurrentOwner())
-            {
-                Fortify();
-            } else
-            {
-                if (!Fortified())
-                {
-                    ChangeOwner(changedTile.CurrentOwner());
-                } else
-                {
-                    RemoveFortify();
-                }
-            }
-        }
+        return neighbours;
     }
 
 }
