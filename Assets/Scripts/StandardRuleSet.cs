@@ -15,6 +15,7 @@
     private void Claim(Player player, HexTile tile)
     {
         tile.Claim(player);
+        player.AddClaimedTile();
         foreach (HexTile neighbour in tile.Neighbours())
         {
             if (neighbour.CurrentOwner() == player)
@@ -54,6 +55,8 @@
         if (opponent.Claimed())
         {
             opponent.Claim(player);
+            player.AddClaimedTile();
+            player.Opponent().RemoveClaimedTile();
         }
         else if (opponent.FortifiedMinor())
         {

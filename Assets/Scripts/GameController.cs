@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
 
@@ -6,7 +7,12 @@ public class GameController : MonoBehaviour {
 
     public Player player1;
     public Player player2;
-    public HexTile turnIndicator;
+    public HexBoard hexBoard;
+
+    [SerializeField]
+    private Text endOfGameMessage;
+
+    private int tileCount;
 
     private void Awake()
     {
@@ -18,12 +24,41 @@ public class GameController : MonoBehaviour {
 
     private void Start()
     {
+        tileCount = hexBoard.Tiles().Count;
         player1.StartTurn();
     }
 
 	public static GameController Instance()
     {
         return INSTANCE;
+    }
+    
+    public void OnEndTurn(Player player)
+    {
+        if (CheckForEndOfGame())
+        {
+            DisplayEndOfGame();
+        } 
+        else
+        {
+            player.Opponent().StartTurn();
+        }
     }	
+
+    private bool CheckForEndOfGame()
+    {
+        return (player1.ClaimedTileCount() + player2.ClaimedTileCount() == tileCount);
+    }
+
+    private void DisplayEndOfGame()
+    {
+        if (player1.ClaimedTileCount() > player2.ClaimedTileCount())
+        {
+            endOfGameMessage.text = "Player 1 Wins!";
+        } else
+        {
+            endOfGameMessage.text = "Player 2 Wins!";
+        }
+    }
 	
 }

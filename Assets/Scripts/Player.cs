@@ -3,6 +3,9 @@
 public abstract class Player : MonoBehaviour {
 
     [SerializeField]
+    private GameController gameController;
+
+    [SerializeField]
     private ActionRuleSet actionRuleSet;
 
     [SerializeField]
@@ -13,6 +16,11 @@ public abstract class Player : MonoBehaviour {
 
     [SerializeField]
     private Color fortifyColor;
+
+    [SerializeField]
+    private PlayerUI playerUI;
+
+    private int claimedTileCount = 0;
 
     public Color PlayerColor()
     {
@@ -26,7 +34,7 @@ public abstract class Player : MonoBehaviour {
 
     public virtual void StartTurn()
     {
-        GameController.Instance().turnIndicator.Claim(this);
+        playerUI.ShowTurnIndicator(true);
     }
 
     public abstract void OnTileSelected(HexTile tile);
@@ -39,12 +47,28 @@ public abstract class Player : MonoBehaviour {
 
     public virtual void EndTurn()
     {
-        opponent.StartTurn();
+        playerUI.ShowTurnIndicator(false);
+        gameController.OnEndTurn(this);
     }
 
     public Player Opponent()
     {
         return opponent;
+    }
+
+    public int ClaimedTileCount()
+    {
+        return claimedTileCount;
+    }
+
+    public void AddClaimedTile()
+    {
+        playerUI.DisplayScore(++claimedTileCount);
+    }
+
+    public void RemoveClaimedTile()
+    {
+        playerUI.DisplayScore(--claimedTileCount);
     }
 
 }
