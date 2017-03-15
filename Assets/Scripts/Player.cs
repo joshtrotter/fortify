@@ -12,7 +12,10 @@ public abstract class Player : MonoBehaviour {
     private Player opponent;
 
     [SerializeField]
-    private Color color;
+    private Color zoneColor;
+
+    [SerializeField]
+    private Color claimColor;
 
     [SerializeField]
     private Color fortifyColor;
@@ -22,9 +25,14 @@ public abstract class Player : MonoBehaviour {
 
     private int claimedTileCount = 0;
 
-    public Color PlayerColor()
+    public Color ZoneColor()
     {
-        return color;
+        return zoneColor;
+    }
+
+    public Color ClaimColor()
+    {
+        return claimColor;
     }
 
     public Color FortifyColor()

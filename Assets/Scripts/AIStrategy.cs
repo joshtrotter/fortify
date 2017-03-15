@@ -35,9 +35,9 @@ public class AIStrategy : MonoBehaviour {
 
 	private float ScoreTile(HexTile tile)
 	{
-		if (tile.Available ()) {
+		if (tile.Available () || tile.ZoneControlledBy() == player) {
 			return ScoreClaimableTile (tile);
-		} else if (tile.FortifiedMinor() && tile.CurrentOwner() == player) {
+		} else if (tile.FortifiedMinor() && tile.ClaimedBy() == player) {
 			return ScoreFortifiedTile(tile);
 		}
 		return 0f;
@@ -53,13 +53,13 @@ public class AIStrategy : MonoBehaviour {
 			if (neighbour.Available()) {
 				claimableNeighbours++;
 				currentScore -= ValueOfClaimableNeighbour(neighbour, tile);
-			} else if (neighbour.CurrentOwner() == player && !neighbour.FortifiedMinor()) {
+			} else if (neighbour.ClaimedBy() == player && !neighbour.FortifiedMinor()) {
 				//TODO the value placed on fortifying should depend on the possible value of a sacrifice
 				currentScore += valueOfFortifiableNeighbour;
-			} else if (neighbour.CurrentOwner() != player && neighbour.FortifiedMinor()) {
+			} else if (neighbour.ClaimedBy() != player && neighbour.FortifiedMinor()) {
 				//TODO the value placed on defortifying should depend on the possible value of a sacrifice
 				currentScore += valueOfDefortifiableNeighbour;
-			} else if (neighbour.CurrentOwner() != player && !neighbour.FortifiedMinor()) {
+			} else if (neighbour.ClaimedBy() != player && !neighbour.FortifiedMinor()) {
 				currentScore += valueOfCapturableNeighbour;
 			}
 		}
@@ -88,7 +88,7 @@ public class AIStrategy : MonoBehaviour {
 		//Calculate the current value of the neighbour tile to the opponent
 		foreach (HexTile neighbourOfNeighbour in neighbour.Neighbours()) {
 			if (neighbourOfNeighbour != tile && !neighbourOfNeighbour.Available()) {
-				if (neighbourOfNeighbour.CurrentOwner() == player) {
+				if (neighbourOfNeighbour.ClaimedBy() == player) {
 					//If we own it then the other player would like to capture / defortify it
 					neighbourValue++;
 				} else if (!neighbourOfNeighbour.FortifiedMinor()) {
@@ -107,7 +107,7 @@ public class AIStrategy : MonoBehaviour {
 		float score = baseValueOfSacrifice;
 		foreach (HexTile neighbour in tile.Neighbours()) 
 		{
-			if (!neighbour.Available() && neighbour.CurrentOwner() != player) {
+			if (!neighbour.Available() && neighbour.ClaimedBy() != player) {
 				if (neighbour.FortifiedMinor()) 
 				{
 					score += valueOfDefortifiableNeighbour;

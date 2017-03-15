@@ -3,10 +3,13 @@ using UnityEngine;
 
 public class HexTile : MonoBehaviour {
 
-    private enum TileState { AVAILABLE, CLAIMED, FORTIFIED_MINOR, FORTIFIED_MAJOR };
+    private enum TileState { AVAILABLE, ZONED, CLAIMED, FORTIFIED_MINOR, FORTIFIED_MAJOR };
 
     [SerializeField]
     private HexTileSelectionObserver selectionObserver;
+
+    [SerializeField]
+    private Color availableColor = Color.white;
 
     private SpriteRenderer rend;
     private Player owner;
@@ -24,11 +27,25 @@ public class HexTile : MonoBehaviour {
         selectionObserver.NotifyPlayerOfTileSelection(this);
     }
 
+    public void Zone(Player player)
+    {
+        owner = player;
+        currentState = TileState.ZONED;
+        rend.color = player.ZoneColor();
+    }
+
+    public void RemoveZone()
+    {
+        owner = null;
+        currentState = TileState.AVAILABLE;
+        rend.color = availableColor;
+    }
+
     public void Claim(Player player)
     {
         owner = player;
         currentState = TileState.CLAIMED;
-        rend.color = player.PlayerColor();
+        rend.color = player.ClaimColor();
     }
 
     public void ApplyMinorFortify()
@@ -46,7 +63,7 @@ public class HexTile : MonoBehaviour {
     public void RemoveFortify()
     {
         currentState = TileState.CLAIMED;
-        rend.color = owner.PlayerColor();
+        rend.color = owner.ClaimColor();
     }
 
     public bool Available()
@@ -69,9 +86,28 @@ public class HexTile : MonoBehaviour {
         return currentState == TileState.FORTIFIED_MAJOR;
     }
 
-    public Player CurrentOwner()
+    public Player ZoneControlledBy()
     {
-        return owner;
+        if (currentState == TileState.ZONED)
+        {
+            return owner;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public Player ClaimedBy()
+    {
+        if (currentState == TileState.ZONED)
+        {
+            return null;
+        }
+        else
+        {
+            return owner;
+        }
     }
 
     public void AddNeighbour(HexTile neighbour)

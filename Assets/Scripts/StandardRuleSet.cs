@@ -18,13 +18,17 @@
         player.AddClaimedTile();
         foreach (HexTile neighbour in tile.Neighbours())
         {
-            if (neighbour.CurrentOwner() == player)
+            if (neighbour.ClaimedBy() == player)
             {
                 InfluenceAllyTile(player, neighbour);
             }
-            else if (neighbour.CurrentOwner() == player.Opponent())
+            else if (neighbour.ClaimedBy() == player.Opponent())
             {
                 InfluenceOpponentTile(player, neighbour);
+            }
+            else
+            {
+                InfluenceUnclaimedTile(player, neighbour);
             }
         }
     }
@@ -35,7 +39,7 @@
 
         foreach (HexTile neighbour in tile.Neighbours())
         {
-            if (neighbour.CurrentOwner() == player.Opponent())
+            if (neighbour.ClaimedBy() == player.Opponent())
             {
                 InfluenceOpponentTile(player, neighbour);
             }
@@ -62,5 +66,29 @@
         {
             opponent.RemoveFortify();
         }
+    }
+
+    private void InfluenceUnclaimedTile(Player player, HexTile unclaimed)
+    {
+        if (unclaimed.ZoneControlledBy() == player)
+        {
+            return;
+        }
+        else if (unclaimed.ZoneControlledBy() == player.Opponent())
+        {
+            unclaimed.RemoveZone();
+        }
+        else
+        {
+            foreach (HexTile neighbour in unclaimed.Neighbours())
+            {
+                if (neighbour.ClaimedBy() == player.Opponent())
+                {
+                    return;
+                }
+            }
+            unclaimed.Zone(player);
+        }
+
     }
 }
