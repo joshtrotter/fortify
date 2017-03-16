@@ -100,7 +100,7 @@ public class HexTile : MonoBehaviour {
 
     public Player ClaimedBy()
     {
-        if (currentState == TileState.ZONED)
+		if (Available() || currentState == TileState.ZONED)
         {
             return null;
         }

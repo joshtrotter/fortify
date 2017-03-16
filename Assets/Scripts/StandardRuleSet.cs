@@ -1,4 +1,6 @@
-﻿public class StandardRuleSet : ActionRuleSet {
+﻿using UnityEngine;
+
+public class StandardRuleSet : ActionRuleSet {
 
     public override void PlayTile(Player player, HexTile tile)
     {
@@ -26,11 +28,8 @@
             {
                 InfluenceOpponentTile(player, neighbour);
             }
-            else
-            {
-                InfluenceUnclaimedTile(player, neighbour);
-            }
         }
+		UpdateZoneOfControl (player, tile);
     }
 
     private void Sacrifice(Player player, HexTile tile)
@@ -59,6 +58,8 @@
         if (opponent.Claimed())
         {
             opponent.Claim(player);
+			Debug.Log ("Rezoning Captured Tile Neighbours");
+			UpdateZoneOfControl (player, opponent);
             player.AddClaimedTile();
             player.Opponent().RemoveClaimedTile();
         }
@@ -68,27 +69,25 @@
         }
     }
 
-    private void InfluenceUnclaimedTile(Player player, HexTile unclaimed)
-    {
-        if (unclaimed.ZoneControlledBy() == player)
-        {
-            return;
-        }
-        else if (unclaimed.ZoneControlledBy() == player.Opponent())
-        {
-            unclaimed.RemoveZone();
-        }
-        else
-        {
-            foreach (HexTile neighbour in unclaimed.Neighbours())
-            {
-                if (neighbour.ClaimedBy() == player.Opponent())
-                {
-                    return;
-                }
-            }
-            unclaimed.Zone(player);
-        }
+	private void UpdateZoneOfControl(Player player, HexTile updated)
+	{
+		foreach (HexTile neighbour in updated.Neighbours())
+		{
+			if (neighbour.ClaimedBy() == null) {
+				ZoneUnclaimedTile (player, neighbour);
+			}
+		}
+	}
 
+	private void ZoneUnclaimedTile(Player player, HexTile unclaimed)
+    {
+		unclaimed.Zone (player);
+		foreach (HexTile neighbour in unclaimed.Neighbours())
+		{
+			if (neighbour.ClaimedBy () == player.Opponent ()) {
+				unclaimed.RemoveZone ();
+				break;
+			}
+		}
     }
 }
