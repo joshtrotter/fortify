@@ -17,6 +17,9 @@ public abstract class Player : MonoBehaviour {
     [SerializeField]
     private Color fortifyColor;
 
+	[SerializeField]
+	private Color comboColor;
+
     [SerializeField]
     private PlayerUI playerUI;
 
@@ -31,6 +34,11 @@ public abstract class Player : MonoBehaviour {
     {
         return fortifyColor;
     }
+
+	public Color ComboColor()
+	{
+		return comboColor;
+	}
 
     public virtual void StartTurn()
     {

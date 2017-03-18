@@ -46,7 +46,7 @@
     {
         if (ally.Claimed())
         {
-            ally.ApplyMinorFortify();
+            ally.Fortify();
         }
     }
 
@@ -58,7 +58,7 @@
             player.AddClaimedTile();
             player.Opponent().RemoveClaimedTile();
         }
-        else if (opponent.FortifiedMinor())
+        else if (opponent.Fortified())
         {
             opponent.RemoveFortify();
         }

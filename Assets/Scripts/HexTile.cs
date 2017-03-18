@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class HexTile : MonoBehaviour {
 
-    private enum TileState { AVAILABLE, CLAIMED, FORTIFIED_MINOR, FORTIFIED_MAJOR };
+    private enum TileState { AVAILABLE, CLAIMED, FORTIFIED, COMBO_FORTIFIED };
 
     [SerializeField]
     private HexTileSelectionObserver selectionObserver;
@@ -12,6 +12,7 @@ public class HexTile : MonoBehaviour {
     private Player owner;
     private TileState currentState;
     private HashSet<HexTile> neighbours = new HashSet<HexTile>();
+	private HashSet<HexTile> tilesInFortifiedCombo = new HashSet<HexTile>();
 
     void Start()
     {
@@ -31,16 +32,17 @@ public class HexTile : MonoBehaviour {
         rend.color = player.PlayerColor();
     }
 
-    public void ApplyMinorFortify()
+    public void Fortify()
     {
-        currentState = TileState.FORTIFIED_MINOR;
+        currentState = TileState.FORTIFIED;
         rend.color = owner.FortifyColor();
     }
 
-    public void ApplyMajorFortify()
+	public void ComboFortify(HashSet<HexTile> tiles)
     {
-        currentState = TileState.FORTIFIED_MAJOR;
-        rend.color = owner.FortifyColor();
+        currentState = TileState.COMBO_FORTIFIED;
+		tilesInFortifiedCombo = tiles;
+		rend.color = owner.ComboColor();
     }
 
     public void RemoveFortify()
@@ -59,14 +61,14 @@ public class HexTile : MonoBehaviour {
         return currentState == TileState.CLAIMED;
     }
 
-    public bool FortifiedMinor()
+    public bool Fortified()
     {
-        return currentState == TileState.FORTIFIED_MINOR;
+        return currentState == TileState.FORTIFIED;
     }
 
-    public bool FortifiedMajor()
+    public bool ComboFortified()
     {
-        return currentState == TileState.FORTIFIED_MAJOR;
+        return currentState == TileState.COMBO_FORTIFIED;
     }
 
     public Player CurrentOwner()
@@ -84,4 +86,9 @@ public class HexTile : MonoBehaviour {
         return neighbours;
     }
 
+	public HashSet<HexTile> TilesInFortifiedCombo()
+	{
+		return tilesInFortifiedCombo;
+	}
+		
 }

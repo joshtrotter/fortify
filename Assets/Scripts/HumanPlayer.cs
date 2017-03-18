@@ -28,7 +28,7 @@ public class HumanPlayer : Player {
     //Check that the selected tile can either be claimed or sacrificed
     private bool ValidateTileSelection(HexTile tile)
     {
-        return tile.Available() || (tile.CurrentOwner() == this && tile.FortifiedMinor());
+		return tile.Available() || (tile.CurrentOwner() == this && tile.ComboFortified());
     }
 }
 
