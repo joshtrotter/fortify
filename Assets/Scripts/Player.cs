@@ -41,8 +41,7 @@ public abstract class Player : MonoBehaviour {
 
     protected void PlayTile(HexTile tile)
     {
-        actionRuleSet.PlayTile(this, tile);
-        EndTurn();
+		actionRuleSet.PlayTile(this, tile, () => EndTurn());
     }
 
     public virtual void EndTurn()

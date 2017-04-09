@@ -19,9 +19,14 @@ public class AIPlayer : Player {
 
     private IEnumerator ProcessAIMove(HexTile tile)
     {
-        tile.GetComponent<SpriteRenderer>().color = Color.green;
-        yield return new WaitForSeconds(2f);
+		yield return new WaitForSeconds (1f);
         PlayTile(tile);
     }
+
+	public override void EndTurn()
+	{
+		base.EndTurn ();
+	}
+
 
 }
