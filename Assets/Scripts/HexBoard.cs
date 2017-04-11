@@ -5,7 +5,7 @@ using UnityEngine;
 // Allows new board layouts to be created in the editor without the need to manually configure neighbours on each tile.
 public class HexBoard : MonoBehaviour {
 
-    private const float maxDistanceToNeighbour = 1.05f;
+    private const float maxDistanceToNeighbour = 1.25f;
 
     private List<HexTile> tiles;
 

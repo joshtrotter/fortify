@@ -34,9 +34,9 @@ public class HexTile : MonoBehaviour {
     public void Claim(Player player, Action onComplete)
     {
 		if (owner == player.Opponent()) {
-			StartCoroutine(FlipToColor(player.PlayerColor(), onComplete));
+			StartCoroutine(FlipToSprite(player.PlayerSprite(), onComplete));
 		} else {
-			StartCoroutine(ExpandToColor(player.PlayerColor(), onComplete));
+			StartCoroutine(ExpandToSprite(player.PlayerSprite(), onComplete));
 		}
 
         owner = player;
@@ -51,7 +51,7 @@ public class HexTile : MonoBehaviour {
 	public void ApplyMinorFortify(Action onComplete)
     {
         currentState = TileState.FORTIFIED_MINOR;
-		StartCoroutine(ExpandToColor(owner.FortifyColor(), onComplete));
+		StartCoroutine(ExpandToSprite(owner.FortifySprite(), onComplete));
     }
 
 	public void RemoveFortify() {
@@ -61,7 +61,7 @@ public class HexTile : MonoBehaviour {
 	public void RemoveFortify(Action onComplete)
     {
         currentState = TileState.CLAIMED;
-		StartCoroutine(ExpandToColor(owner.PlayerColor(), onComplete));
+		StartCoroutine(ExpandToSprite(owner.PlayerSprite(), onComplete));
     }
 
     public bool Available()
@@ -98,6 +98,34 @@ public class HexTile : MonoBehaviour {
     {
         return neighbours;
     }
+
+	private IEnumerator ExpandToSprite(Sprite sprite, Action onComplete, float initialScale = 0.33f, float duration = 0.20f) {
+		HexTile placeholder = Instantiate (this, transform.parent);
+		rend.sortingLayerName = "Overlay";
+		rend.sprite = sprite;
+
+		Vector3 initialExpansionSize = Vector3.one * initialScale;
+		transform.localScale = initialExpansionSize;
+
+		yield return Expand (initialExpansionSize, duration);
+
+		Destroy (placeholder.gameObject);
+		rend.sortingLayerName = "Default";
+
+		if (onComplete != null) {
+			onComplete ();
+		}
+	}
+
+	private IEnumerator FlipToSprite(Sprite sprite, Action onComplete, float duration = 0.20f) {		
+		yield return Flip (1f, 0f, duration / 2f);
+		rend.sprite = sprite;
+		yield return Flip (0f, 1f, duration / 2f);
+
+		if (onComplete != null) {
+			onComplete ();
+		}
+	}
 
 	private IEnumerator ExpandToColor(Color color, Action onComplete, float initialScale = 0.33f, float duration = 0.20f) {
 		HexTile placeholder = Instantiate (this, transform.parent);
@@ -143,6 +171,13 @@ public class HexTile : MonoBehaviour {
 			transform.localScale = new Vector3(Mathf.Lerp (startSize, endSize, elapsed / duration), transform.localScale.y);
 			yield return new WaitForEndOfFrame ();
 		} 
+	}
+
+	public void AddHighlight() {
+		HexTile highlight = Instantiate (this, transform.parent);
+		highlight.transform.localScale = Vector3.one * 1.1f;
+		highlight.GetComponent<SpriteRenderer> ().sortingLayerName = "Underlay";
+		highlight.GetComponent<SpriteRenderer> ().color = Color.green;
 	}
 
 }

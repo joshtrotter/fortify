@@ -14,18 +14,34 @@ public abstract class Player : MonoBehaviour {
     [SerializeField]
     private Color color;
 
+	[SerializeField]
+	private Sprite playerSprite;
+
     [SerializeField]
     private Color fortifyColor;
+
+	[SerializeField]
+	private Sprite fortifySprite;
 
     [SerializeField]
     private PlayerUI playerUI;
 
     private int claimedTileCount = 0;
 
+	public Sprite PlayerSprite()
+	{
+		return playerSprite;
+	}
+
     public Color PlayerColor()
     {
         return color;
     }
+
+	public Sprite FortifySprite()
+	{
+		return fortifySprite;
+	}
 
     public Color FortifyColor()
     {
