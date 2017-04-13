@@ -13,8 +13,14 @@ public class AIStrategy : MonoBehaviour {
 
 	public float baseValueOfSacrifice = -0.5f;
 
-	public Player player;
-	public HexBoard board;
+	private Player player;
+	private HexBoard board;
+
+	public void Initialise(Player player, HexBoard board)
+	{
+		this.player = player;
+		this.board = board;
+	}
 
 	public void ChooseTile() 
 	{

@@ -3,35 +3,26 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
 
-    private static GameController INSTANCE;
-
-    public Player player1;
-    public Player player2;
-    public HexBoard hexBoard;
+    private Player player1;
+    private Player player2;
+    private HexBoard hexBoard;
 
     [SerializeField]
     private Text endOfGameMessage;
 
     private int tileCount;
+	    
+	public void Initialise() {
+		player1 = GlobalContext.INSTANCE.getPlayer1 ();
+		player2 = GlobalContext.INSTANCE.getPlayer2 ();
+		hexBoard = GlobalContext.INSTANCE.getBoard ();
+		tileCount = hexBoard.Tiles().Count;        
+	}
 
-    private void Awake()
-    {
-        if (INSTANCE == null)
-        {
-            INSTANCE = this;
-        }       
-    }
-
-    private void Start()
-    {
-        tileCount = hexBoard.Tiles().Count;
-        player1.StartTurn();
-    }
-
-	public static GameController Instance()
-    {
-        return INSTANCE;
-    }
+	public void StartGame() 
+	{
+		player1.StartTurn();
+	}
     
     public void OnEndTurn(Player player)
     {

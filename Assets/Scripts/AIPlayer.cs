@@ -6,6 +6,12 @@ public class AIPlayer : Player {
     [SerializeField]
     private AIStrategy strategy;
 
+	public override void InitialiseForGame (GameContext gameContext, PlayerUI playerUI)
+	{
+		base.InitialiseForGame (gameContext, playerUI);
+		strategy.Initialise (this, GlobalContext.INSTANCE.getBoard ());
+	}
+
     public override void StartTurn()
     {
         base.StartTurn();

@@ -2,13 +2,10 @@
 
 public abstract class Player : MonoBehaviour {
 
-    [SerializeField]
     private GameController gameController;
 
-    [SerializeField]
     private ActionRuleSet actionRuleSet;
 
-    [SerializeField]
     private Player opponent;
 
     [SerializeField]
@@ -23,7 +20,6 @@ public abstract class Player : MonoBehaviour {
 	[SerializeField]
 	private Sprite fortifySprite;
 
-    [SerializeField]
     private PlayerUI playerUI;
 
     private int claimedTileCount = 0;
@@ -47,6 +43,17 @@ public abstract class Player : MonoBehaviour {
     {
         return fortifyColor;
     }
+
+	public void SetOpponent(Player opponent) {
+		this.opponent = opponent;
+	}
+
+	public virtual void InitialiseForGame(GameContext gameContext, PlayerUI playerUI) 
+	{
+		this.gameController = gameContext.getGameController ();
+		this.actionRuleSet = gameContext.getRuleSet ();
+		this.playerUI = playerUI;
+	}
 
     public virtual void StartTurn()
     {

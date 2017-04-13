@@ -2,7 +2,7 @@
 
 public class HumanPlayer : Player {
 
-    [SerializeField]
+	[SerializeField]
     private HexTileSelectionObserver hexTileSelectionObserver;
 
     public override void StartTurn()
