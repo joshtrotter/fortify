@@ -1,14 +1,10 @@
 ﻿using UnityEngine;
 
-public class HumanPlayer : Player {
-
-	[SerializeField]
-    private HexTileSelectionObserver hexTileSelectionObserver;
+public class HumanPlayer : Player, TileSelectionListener {
 
     public override void StartTurn()
     {
-        base.StartTurn();
-        hexTileSelectionObserver.RegisterPlayer(this);
+		EventBus.INSTANCE.RegisterTileSelectionListener (this);
     }
 
     public override void OnTileSelected(HexTile tile)
@@ -21,7 +17,7 @@ public class HumanPlayer : Player {
 
     public override void EndTurn()
     {
-        hexTileSelectionObserver.DeregisterPlayer(this);
+		EventBus.INSTANCE.DeregisterTileSelectionListener (this);
         base.EndTurn();
     }
 

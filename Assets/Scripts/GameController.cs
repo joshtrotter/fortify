@@ -1,22 +1,35 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class GameController : MonoBehaviour {
+public class GameController : MonoBehaviour, EndTurnListener {
 
     private Player player1;
     private Player player2;
-    private HexBoard hexBoard;
+
+	[SerializeField]
+	private PlayerUI player1UI;
+
+	[SerializeField]
+	private PlayerUI player2UI;
 
     [SerializeField]
     private Text endOfGameMessage;
 
     private int tileCount;
+
+	void Start () {
+		Initialise ();
+		StartGame ();
+	}
 	    
 	public void Initialise() {
 		player1 = GlobalContext.INSTANCE.getPlayer1 ();
 		player2 = GlobalContext.INSTANCE.getPlayer2 ();
-		hexBoard = GlobalContext.INSTANCE.getBoard ();
-		tileCount = hexBoard.Tiles().Count;        
+		tileCount = GlobalContext.INSTANCE.getBoard ().Tiles().Count;        
+
+		player1UI.InitialiseForPlayer (player1);
+		player2UI.InitialiseForPlayer (player2);
+		EventBus.INSTANCE.RegisterEndTurnListener (this);
 	}
 
 	public void StartGame() 

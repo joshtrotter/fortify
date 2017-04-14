@@ -14,12 +14,10 @@ public class AIStrategy : MonoBehaviour {
 	public float baseValueOfSacrifice = -0.5f;
 
 	private Player player;
-	private HexBoard board;
 
-	public void Initialise(Player player, HexBoard board)
+	public void Initialise(Player player)
 	{
 		this.player = player;
-		this.board = board;
 	}
 
 	public void ChooseTile() 
@@ -27,7 +25,7 @@ public class AIStrategy : MonoBehaviour {
 		//TODO deal with case where all tiles are scored zero or negative
 		float topScore = 0f;
 		HexTile topTile = null;
-		foreach (HexTile tile in board.Tiles())
+		foreach (HexTile tile in GlobalContext.INSTANCE.getBoard().Tiles())
 		{
 			float score = ScoreTile(tile);
 			if (score > topScore) {

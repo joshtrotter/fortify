@@ -15,22 +15,22 @@ public class GlobalContext : MonoBehaviour {
 	[SerializeField]
 	private HexBoard board;
 
+	[SerializeField]
+	private ActionRuleSet actionRuleSet;
+
 	void Awake () {
 		if (INSTANCE == null) {
 			INSTANCE = this;
 			DontDestroyOnLoad (INSTANCE);
-			setupOpponents ();
 		}
 	}
 
 	public void setPlayer1(Player player1) {
 		this.player1 = player1;
-		setupOpponents ();
 	}
 
 	public void setPlayer2(Player player2) {
 		this.player2 = player2;
-		setupOpponents ();
 	}
 
 	public void setBoard(HexBoard board) {
@@ -49,13 +49,12 @@ public class GlobalContext : MonoBehaviour {
 		return board;
 	}
 
-	private void setupOpponents() {
-		if (player1 != null) {
-			player1.SetOpponent (player2);
-		}
-		if (player2 != null) {
-			player2.SetOpponent (player1);
-		}
+	public ActionRuleSet getRuleSet() {
+		return actionRuleSet;
+	}
+
+	public Player getOpponentOf(Player player) {
+		return player == player1 ? player2 : player1;
 	}
 
 }

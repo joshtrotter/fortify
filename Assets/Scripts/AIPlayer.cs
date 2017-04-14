@@ -6,15 +6,12 @@ public class AIPlayer : Player {
     [SerializeField]
     private AIStrategy strategy;
 
-	public override void InitialiseForGame (GameContext gameContext, PlayerUI playerUI)
-	{
-		base.InitialiseForGame (gameContext, playerUI);
-		strategy.Initialise (this, GlobalContext.INSTANCE.getBoard ());
+	public void Awake() {
+		strategy.Initialise (this);
 	}
 
     public override void StartTurn()
     {
-        base.StartTurn();
         strategy.ChooseTile();
     }
 
@@ -28,11 +25,5 @@ public class AIPlayer : Player {
 		yield return new WaitForSeconds (1f);
         PlayTile(tile);
     }
-
-	public override void EndTurn()
-	{
-		base.EndTurn ();
-	}
-
-
+		
 }

@@ -7,9 +7,6 @@ public class HexTile : MonoBehaviour {
 
     private enum TileState { AVAILABLE, CLAIMED, FORTIFIED_MINOR, FORTIFIED_MAJOR };
 
-    [SerializeField]
-    private HexTileSelectionObserver selectionObserver;
-
     private SpriteRenderer rend;
     private Player owner;
     private TileState currentState;
@@ -23,7 +20,7 @@ public class HexTile : MonoBehaviour {
 
     void OnMouseDown()
     {
-        selectionObserver.NotifyPlayerOfTileSelection(this);
+		EventBus.INSTANCE.NotifyTileSelection (this);        
     }
 
 	public void Claim(Player player) 
