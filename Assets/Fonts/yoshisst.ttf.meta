@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: e4a2c12b85fdc4c2b9cbaee95b44c032
+timeCreated: 1492170264
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Yoshi's Story game text BRK
+  fontNames:
+  - Yoshi's Story game text BRK
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

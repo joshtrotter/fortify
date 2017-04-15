@@ -24,10 +24,8 @@ public class PlayerUI : MonoBehaviour, EndTurnListener {
 
 	public void OnEndTurn(Player player)
 	{
-		if (player == this.player) {
-			SwapTurnIndicator ();
-			UpdateScore ();
-		}
+		SwapTurnIndicator ();
+		UpdateScore ();
 	}
 
 	private void SwapTurnIndicator()
