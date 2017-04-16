@@ -23,7 +23,7 @@ public class AIStrategy : MonoBehaviour {
 	public void ChooseTile() 
 	{
 		//TODO deal with case where all tiles are scored zero or negative
-		float topScore = 0f;
+		float topScore = -1f;
 		HexTile topTile = null;
 		foreach (HexTile tile in GlobalContext.INSTANCE.getBoard().Tiles())
 		{
@@ -41,7 +41,7 @@ public class AIStrategy : MonoBehaviour {
 	{
 		if (tile.Available ()) {
 			return ScoreClaimableTile (tile);
-		} else if (tile.FortifiedMinor() && tile.CurrentOwner() == player) {
+		} else if (tile.Fortified() && tile.CurrentOwner() == player) {
 			return ScoreFortifiedTile(tile);
 		}
 		return 0f;
@@ -57,13 +57,13 @@ public class AIStrategy : MonoBehaviour {
 			if (neighbour.Available()) {
 				claimableNeighbours++;
 				currentScore -= ValueOfClaimableNeighbour(neighbour, tile);
-			} else if (neighbour.CurrentOwner() == player && !neighbour.FortifiedMinor()) {
+			} else if (neighbour.CurrentOwner() == player && !neighbour.Fortified()) {
 				//TODO the value placed on fortifying should depend on the possible value of a sacrifice
 				currentScore += valueOfFortifiableNeighbour;
-			} else if (neighbour.CurrentOwner() != player && neighbour.FortifiedMinor()) {
+			} else if (neighbour.CurrentOwner() != player && neighbour.Fortified()) {
 				//TODO the value placed on defortifying should depend on the possible value of a sacrifice
 				currentScore += valueOfDefortifiableNeighbour;
-			} else if (neighbour.CurrentOwner() != player && !neighbour.FortifiedMinor()) {
+			} else if (neighbour.CurrentOwner() != player && !neighbour.Fortified()) {
 				currentScore += valueOfCapturableNeighbour;
 			}
 		}
@@ -95,7 +95,7 @@ public class AIStrategy : MonoBehaviour {
 				if (neighbourOfNeighbour.CurrentOwner() == player) {
 					//If we own it then the other player would like to capture / defortify it
 					neighbourValue++;
-				} else if (!neighbourOfNeighbour.FortifiedMinor()) {
+				} else if (!neighbourOfNeighbour.Fortified()) {
 					//If they own it but it isn't fortified then they would like to fortify it
 					neighbourValue++;
 				}
@@ -112,7 +112,7 @@ public class AIStrategy : MonoBehaviour {
 		foreach (HexTile neighbour in tile.Neighbours()) 
 		{
 			if (!neighbour.Available() && neighbour.CurrentOwner() != player) {
-				if (neighbour.FortifiedMinor()) 
+				if (neighbour.Fortified()) 
 				{
 					score += valueOfDefortifiableNeighbour;
 				} else {

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerUI : MonoBehaviour, EndTurnListener {
+public class PlayerUI : MonoBehaviour, EndTurnListener, CoinFlipListener {
 
     [SerializeField]
     private Image turnIndicator;
@@ -12,7 +12,6 @@ public class PlayerUI : MonoBehaviour, EndTurnListener {
     [SerializeField]
     private Text score;
 
-
 	private Player player;
 
 	public void InitialiseForPlayer(Player player) 
@@ -20,6 +19,12 @@ public class PlayerUI : MonoBehaviour, EndTurnListener {
 		this.player = player;
 		playerIcon.sprite = player.PlayerSprite ();
 		EventBus.INSTANCE.RegisterEndTurnListener (this);
+		EventBus.INSTANCE.RegisterCoinFlipListener (this);
+	}
+
+	public void OnStartingPlayerChosen (Player player)
+	{
+		turnIndicator.gameObject.SetActive (this.player == player);
 	}
 
 	public void OnEndTurn(Player player)

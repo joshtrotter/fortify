@@ -8,6 +8,7 @@ public class EventBus : MonoBehaviour
 
 	private HashSet<EndTurnListener> endTurnListeners = new HashSet<EndTurnListener> ();
 	private HashSet<TileSelectionListener> tileSelectionListeners = new HashSet<TileSelectionListener> ();
+	private HashSet<CoinFlipListener> coinFlipListeners = new HashSet<CoinFlipListener> ();
 
 	void Awake () {
 		if (INSTANCE == null) {
@@ -47,6 +48,23 @@ public class EventBus : MonoBehaviour
 	{
 		foreach (TileSelectionListener listener in tileSelectionListeners) {
 			listener.OnTileSelected (tile);
+		}
+	}
+
+	public void RegisterCoinFlipListener(CoinFlipListener listener) 
+	{
+		coinFlipListeners.Add (listener);
+	}
+
+	public void DeregistercoinflipListener(CoinFlipListener listener)
+	{
+		coinFlipListeners.Remove (listener);
+	}
+
+	public void NotifyCoinFlip(Player winner)
+	{
+		foreach (CoinFlipListener listener in coinFlipListeners) {
+			listener.OnStartingPlayerChosen (winner);
 		}
 	}
 }

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class GameController : MonoBehaviour, EndTurnListener {
+public class GameController : MonoBehaviour, EndTurnListener, CoinFlipListener {
 
     private Player player1;
     private Player player2;
@@ -12,8 +12,11 @@ public class GameController : MonoBehaviour, EndTurnListener {
 	[SerializeField]
 	private PlayerUI player2UI;
 
-    [SerializeField]
-    private Text endOfGameMessage;
+	[SerializeField]
+	private NotificationPanel notificationPanel;
+
+	[SerializeField]
+	private Coin coin;
 
     private int tileCount;
 
@@ -29,12 +32,19 @@ public class GameController : MonoBehaviour, EndTurnListener {
 
 		player1UI.InitialiseForPlayer (player1);
 		player2UI.InitialiseForPlayer (player2);
+
 		EventBus.INSTANCE.RegisterEndTurnListener (this);
+		EventBus.INSTANCE.RegisterCoinFlipListener (this);
 	}
 
 	public void StartGame() 
 	{
-		player1.StartTurn();
+		coin.Toss (player1, player2);
+	}
+
+	public void OnStartingPlayerChosen (Player player)
+	{
+		player.StartTurn();
 	}
     
     public void OnEndTurn(Player player)
@@ -45,6 +55,7 @@ public class GameController : MonoBehaviour, EndTurnListener {
         } 
         else
         {
+			notificationPanel.Hide (() => {});
             player.Opponent().StartTurn();
         }
     }	
@@ -58,10 +69,10 @@ public class GameController : MonoBehaviour, EndTurnListener {
     {
         if (player1.ClaimedTileCount() > player2.ClaimedTileCount())
         {
-            endOfGameMessage.text = "Player 1 Wins!";
+			notificationPanel.Reveal (player1.ToString () + " Wins!", () => {});
         } else
         {
-            endOfGameMessage.text = "Player 2 Wins!";
+			notificationPanel.Reveal (player2.ToString () + " Wins!", () => {});
         }
     }
 	

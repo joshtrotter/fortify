@@ -46,7 +46,7 @@ public class StandardRuleSet : ActionRuleSet
 	private void InfluenceAllyTile (Player player, HexTile ally)
 	{
 		if (ally.Claimed ()) {
-			ally.ApplyMinorFortify ();
+			ally.ApplyFortify ();
 		}
 	}
 
@@ -56,7 +56,7 @@ public class StandardRuleSet : ActionRuleSet
 			opponent.Claim (player);
 			player.AddClaimedTile ();
 			player.Opponent ().RemoveClaimedTile ();
-		} else if (opponent.FortifiedMinor ()) {
+		} else if (opponent.Fortified ()) {
 			opponent.RemoveFortify ();
 		}
 	}
