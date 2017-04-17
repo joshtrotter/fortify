@@ -28,7 +28,9 @@ public class GameController : MonoBehaviour, EndTurnListener, CoinFlipListener {
 	public void Initialise() {
 		player1 = GlobalContext.INSTANCE.getPlayer1 ();
 		player2 = GlobalContext.INSTANCE.getPlayer2 ();
-		tileCount = GlobalContext.INSTANCE.getBoard ().Tiles().Count;        
+		HexBoard board = GlobalContext.INSTANCE.getBoard ();
+		board.Initialise ();
+		tileCount = board.Tiles().Count;        
 
 		player1UI.InitialiseForPlayer (player1);
 		player2UI.InitialiseForPlayer (player2);

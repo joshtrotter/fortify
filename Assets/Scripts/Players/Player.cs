@@ -2,6 +2,7 @@
 
 public abstract class Player : MonoBehaviour {
 
+	[SerializeField]
 	private PlayerConfig playerConfig;
    
     private int claimedTileCount = 0;

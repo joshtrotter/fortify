@@ -9,9 +9,11 @@ public class HexBoard : MonoBehaviour {
 
     private List<HexTile> tiles;
 
-	void Start () {
-        tiles = new List<HexTile>(gameObject.GetComponentsInChildren<HexTile>());
-        ConfigureTileNeighbours();	
+	public void Initialise() 
+	{
+		gameObject.SetActive (true);
+		tiles = new List<HexTile>(gameObject.GetComponentsInChildren<HexTile>());
+		ConfigureTileNeighbours();
 	}
 
     public List<HexTile> Tiles()
