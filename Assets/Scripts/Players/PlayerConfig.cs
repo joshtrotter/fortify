@@ -7,12 +7,21 @@ public class PlayerConfig : MonoBehaviour
 	private Sprite playerSprite;
 
 	[SerializeField]
-	private Sprite fortifySprite; 
+	private Sprite fortifySprite;
 
-	public PlayerConfig (Sprite playerSprite, Sprite fortifySprite)
+	[SerializeField]
+	private String playerName;
+
+	public PlayerConfig (Sprite playerSprite, Sprite fortifySprite, String playerName)
 	{
 		this.playerSprite = playerSprite;
 		this.fortifySprite = fortifySprite;
+		this.playerName = playerName;
+	}
+
+	public void SetPlayerName(String playerName)
+	{
+		this.playerName = playerName;
 	}
 
 	public Sprite PlayerSprite()
@@ -23,7 +32,12 @@ public class PlayerConfig : MonoBehaviour
 	public Sprite FortifySprite()
 	{
 		return fortifySprite;
-	}		
+	}
+
+	public String PlayerName()
+	{
+		return playerName;
+	}
 }
 
 

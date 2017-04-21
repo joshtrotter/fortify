@@ -9,6 +9,10 @@ public class EventBus : MonoBehaviour
 	private HashSet<EndTurnListener> endTurnListeners = new HashSet<EndTurnListener> ();
 	private HashSet<TileSelectionListener> tileSelectionListeners = new HashSet<TileSelectionListener> ();
 	private HashSet<CoinFlipListener> coinFlipListeners = new HashSet<CoinFlipListener> ();
+	private HashSet<StartAnimationListener> startAnimationListeners = new HashSet<StartAnimationListener> ();
+	private HashSet<EndAnimationListener> endAnimationListeners = new HashSet<EndAnimationListener> ();
+
+	private int runningAnimationCount = 0;
 
 	void Awake () {
 		if (INSTANCE == null) {
@@ -66,6 +70,52 @@ public class EventBus : MonoBehaviour
 		foreach (CoinFlipListener listener in coinFlipListeners) {
 			listener.OnStartingPlayerChosen (winner);
 		}
+	}
+
+	public void RegisterStartAnimationListener(StartAnimationListener listener) 
+	{
+		startAnimationListeners.Add (listener);
+	}
+
+	public void DeregisterStartAnimationListener(StartAnimationListener listener)
+	{
+		startAnimationListeners.Remove (listener);
+	}
+
+	public void NotifyStartAnimation()
+	{
+		runningAnimationCount++;
+		foreach (StartAnimationListener listener in startAnimationListeners) {
+			listener.OnAnimationStart ();
+		}
+	}
+
+	public void RegisterEndAnimationListener(EndAnimationListener listener) 
+	{
+		endAnimationListeners.Add (listener);
+	}
+
+	public void DeregisterEndAnimationListener(EndAnimationListener listener)
+	{
+		endAnimationListeners.Remove (listener);
+	}
+
+	public void NotifyEndAnimation()
+	{
+		runningAnimationCount--;
+		foreach (EndAnimationListener listener in endAnimationListeners) {
+			listener.OnAnimationEnd (runningAnimationCount);
+		}
+	}
+
+	public void Reset() 
+	{
+		endTurnListeners.Clear ();
+		tileSelectionListeners.Clear ();
+		coinFlipListeners.Clear ();
+		startAnimationListeners.Clear ();
+		endAnimationListeners.Clear ();
+		runningAnimationCount = 0;
 	}
 }
 

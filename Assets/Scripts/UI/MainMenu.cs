@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour {
+	[SerializeField]
+	private Player player;
 
 	[SerializeField]
 	private Player opponentAI;
@@ -18,17 +20,33 @@ public class MainMenu : MonoBehaviour {
 	private List<HexBoard> boards;
 
 	public void SinglePlayer() {
-		opponentAI.SetPlayerConfig (RandomConfig ());
+		AssignPlayerConfigs (opponentAI);
+		GlobalContext.INSTANCE.setPlayer1 (player);
 		GlobalContext.INSTANCE.setPlayer2 (opponentAI);
 		GlobalContext.INSTANCE.setBoard (RandomBoard ());
 		SceneManager.LoadScene ("Game");
 	}
 
 	public void MultiPlayer() {
-		opponentHuman.SetPlayerConfig (RandomConfig ());
+		AssignPlayerConfigs (opponentHuman);
+		GlobalContext.INSTANCE.setPlayer1 (player);
 		GlobalContext.INSTANCE.setPlayer2 (opponentHuman);
 		GlobalContext.INSTANCE.setBoard (RandomBoard ());
 		SceneManager.LoadScene ("Game");
+	}
+
+	private void AssignPlayerConfigs(Player opponent)
+	{
+		PlayerConfig playerConfig = RandomConfig ();
+		playerConfig.SetPlayerName ("Player 1");
+		player.SetPlayerConfig (playerConfig);
+
+		PlayerConfig opponentConfig = RandomConfig ();
+		while (opponentConfig == playerConfig) {
+			opponentConfig = RandomConfig ();
+		}
+		opponentConfig.SetPlayerName ("Player 2");
+		opponent.SetPlayerConfig (opponentConfig);
 	}
 
 	private HexBoard RandomBoard() {
@@ -40,6 +58,5 @@ public class MainMenu : MonoBehaviour {
 		int index = Random.Range (0, configs.Count);
 		return configs [index];
 	}
-
 
 }

@@ -3,19 +3,22 @@ using System.Collections;
 using System;
 using UnityEngine;
 
+[RequireComponent(typeof(SpriteContainer))]
 public class HexTile : MonoBehaviour {
 
     private enum TileState { AVAILABLE, CLAIMED, FORTIFIED };
 
+	[SerializeField]
+	private Sprite defaultSprite;
+
     private Player owner;
-	private TileAnimator tileAnimator;
-    private TileState currentState;
+	private SpriteAnimator tileAnimator;
+	private TileState currentState = TileState.AVAILABLE;
     private HashSet<HexTile> neighbours = new HashSet<HexTile>();
 
     void Start()
     {
-		tileAnimator = gameObject.GetComponent<TileAnimator> ();
-        currentState = TileState.AVAILABLE;
+		tileAnimator = gameObject.GetComponent<SpriteAnimator> ();
     }
 
     void OnMouseDown()
@@ -23,13 +26,21 @@ public class HexTile : MonoBehaviour {
 		EventBus.INSTANCE.NotifyTileSelection (this);        
     }
 
+	public void Reset()
+	{
+		currentState = TileState.AVAILABLE;
+		tileAnimator.SetSprite (defaultSprite);
+		neighbours.Clear ();
+		owner = null;
+	}
+
 	public void Claim(Player player) 
 	{
 		Claim (player, null);
 	}
 
     public void Claim(Player player, Action onComplete)
-    {
+    {		
 		if (owner == player.Opponent()) {
 			StartCoroutine(tileAnimator.FlipToSprite(player.PlayerSprite(), onComplete));
 		} else {

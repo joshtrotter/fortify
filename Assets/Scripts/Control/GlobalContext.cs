@@ -6,13 +6,10 @@ public class GlobalContext : MonoBehaviour {
 
 	public static GlobalContext INSTANCE;
 
-	[SerializeField]
 	private Player player1;
 
-	[SerializeField]
 	private Player player2;
 
-	[SerializeField]
 	private HexBoard board;
 
 	[SerializeField]
@@ -25,16 +22,37 @@ public class GlobalContext : MonoBehaviour {
 		}
 	}
 
+	public void Initialise() {
+		board.Initialise ();
+		player1.Initialise ();
+		player2.Initialise ();
+	}
+
+	public void Reset() {
+		board.Reset ();
+		player1.Reset ();
+		player2.Reset ();
+	}
+
 	public void setPlayer1(Player player1) {
-		this.player1 = player1;
+		if (this.player1 != null) {			
+			Destroy (this.player1.gameObject);
+		}
+		this.player1 = Instantiate(player1, this.transform);
 	}
 
 	public void setPlayer2(Player player2) {
-		this.player2 = player2;
+		if (this.player2 != null) {
+			Destroy (this.player2.gameObject);
+		}
+		this.player2 = Instantiate(player2, this.transform);
 	}
 
 	public void setBoard(HexBoard board) {
-		this.board = board;
+		if (this.board != null) {
+			Destroy (this.board.gameObject);
+		}
+		this.board = Instantiate(board, this.transform);
 	}
 
 	public Player getPlayer1() {

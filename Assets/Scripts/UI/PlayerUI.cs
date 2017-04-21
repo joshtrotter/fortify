@@ -3,40 +3,61 @@ using UnityEngine.UI;
 
 public class PlayerUI : MonoBehaviour, EndTurnListener, CoinFlipListener {
 
-    [SerializeField]
-    private Image turnIndicator;
+	[SerializeField]
+	private Color fadeOutColor;
 
 	[SerializeField]
-	private Image playerIcon;
+	private Text playerName;
+
+	[SerializeField]
+	private SpriteAnimator playerIcon;
 
     [SerializeField]
     private Text score;
 
 	private Player player;
 
+	private bool fadedIn = true;
+
 	public void InitialiseForPlayer(Player player) 
 	{
 		this.player = player;
-		playerIcon.sprite = player.PlayerSprite ();
+		playerIcon.SetSprite (player.PlayerSprite ());
+		playerName.text = player.PlayerName ();
 		EventBus.INSTANCE.RegisterEndTurnListener (this);
 		EventBus.INSTANCE.RegisterCoinFlipListener (this);
 	}
 
 	public void OnStartingPlayerChosen (Player player)
 	{
-		turnIndicator.gameObject.SetActive (this.player == player);
+		if (this.player != player) {
+			FadeOut ();
+		}
 	}
 
 	public void OnEndTurn(Player player)
 	{
-		SwapTurnIndicator ();
+		if (fadedIn) {
+			FadeOut ();
+		} else {
+			FadeIn ();
+		}
 		UpdateScore ();
 	}
+		
+	private void FadeIn()
+	{
+		fadedIn = true;
+		playerName.color = Color.white;
+		score.color = Color.white;
+	}
 
-	private void SwapTurnIndicator()
-    {
-		turnIndicator.gameObject.SetActive(!turnIndicator.gameObject.activeSelf);
-    }
+	private void FadeOut() 
+	{
+		fadedIn = false;
+		playerName.color = fadeOutColor;
+		score.color = fadeOutColor;
+	}
 
     private void UpdateScore()
     {

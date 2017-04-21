@@ -16,6 +16,15 @@ public class HexBoard : MonoBehaviour {
 		ConfigureTileNeighbours();
 	}
 
+	public void Reset()
+	{
+		foreach (HexTile tile in tiles) {
+			tile.Reset ();
+		}
+		tiles.Clear ();
+		gameObject.SetActive (false);
+	}
+
     public List<HexTile> Tiles()
     {
         return tiles;

@@ -7,6 +7,16 @@ public abstract class Player : MonoBehaviour {
    
     private int claimedTileCount = 0;
 
+	public virtual void Initialise()
+	{
+
+	}
+
+	public virtual void Reset()
+	{
+		this.claimedTileCount = 0;
+	}
+
 	public Sprite PlayerSprite()
 	{
 		return playerConfig.PlayerSprite();
@@ -17,9 +27,14 @@ public abstract class Player : MonoBehaviour {
 		return playerConfig.FortifySprite();
 	}
 
+	public string PlayerName()
+	{
+		return playerConfig.PlayerName ();
+	}
+
 	public void SetPlayerConfig(PlayerConfig playerConfig)
 	{
-		this.playerConfig = playerConfig;
+		this.playerConfig = Instantiate(playerConfig, this.transform);
 	}
 
 	public abstract void StartTurn();    
@@ -27,7 +42,7 @@ public abstract class Player : MonoBehaviour {
     public abstract void OnTileSelected(HexTile tile);
 
     protected void PlayTile(HexTile tile)
-    {
+    {		
 		GlobalContext.INSTANCE.getRuleSet().PlayTile(this, tile, () => EndTurn());
     }
 

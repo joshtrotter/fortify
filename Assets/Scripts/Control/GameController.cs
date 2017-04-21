@@ -26,11 +26,10 @@ public class GameController : MonoBehaviour, EndTurnListener, CoinFlipListener {
 	}
 	    
 	public void Initialise() {
+		GlobalContext.INSTANCE.Initialise ();
 		player1 = GlobalContext.INSTANCE.getPlayer1 ();
 		player2 = GlobalContext.INSTANCE.getPlayer2 ();
-		HexBoard board = GlobalContext.INSTANCE.getBoard ();
-		board.Initialise ();
-		tileCount = board.Tiles().Count;        
+		tileCount = GlobalContext.INSTANCE.getBoard ().Tiles().Count;        
 
 		player1UI.InitialiseForPlayer (player1);
 		player2UI.InitialiseForPlayer (player2);
@@ -71,10 +70,10 @@ public class GameController : MonoBehaviour, EndTurnListener, CoinFlipListener {
     {
         if (player1.ClaimedTileCount() > player2.ClaimedTileCount())
         {
-			notificationPanel.Reveal (player1.ToString () + " Wins!", () => {});
+			notificationPanel.Reveal (player1.PlayerName () + " Wins!", () => {});
         } else
         {
-			notificationPanel.Reveal (player2.ToString () + " Wins!", () => {});
+			notificationPanel.Reveal (player2.PlayerName () + " Wins!", () => {});
         }
     }
 	

@@ -14,11 +14,11 @@ public class Coin : MonoBehaviour {
 	[SerializeField]
 	private NotificationPanel notificationPanel;
 
-	private TileAnimator tileAnimator;
+	private SpriteAnimator tileAnimator;
 
 	void Start () 
 	{
-		tileAnimator = gameObject.GetComponent<TileAnimator> ();
+		tileAnimator = gameObject.GetComponent<SpriteAnimator> ();
 	}
 	
 	public void Toss(Player player1, Player player2) 
@@ -47,7 +47,7 @@ public class Coin : MonoBehaviour {
 
 	private void OnPlayerSelected(Player player)
 	{
-		notificationPanel.Reveal (player.ToString () + " Goes First!", () => Finish (player), 0.25f, 0.15f);
+		notificationPanel.Reveal (player.PlayerName () + " Goes First!", () => Finish (player), 0.25f, 0.15f);
 	}
 
 	private void Finish(Player player)

@@ -1,14 +1,33 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AIPlayer : Player {
+public class AIPlayer : Player, CoinFlipListener {
 
     [SerializeField]
     private AIStrategy strategy;
 
-	public void Awake() {
+	private bool addInitialDelay = false;
+
+	public override void Initialise()
+	{
+		base.Initialise ();
 		strategy.Initialise (this);
+		EventBus.INSTANCE.RegisterCoinFlipListener (this);
 	}
+
+	public override void Reset()
+	{
+		base.Reset ();
+		this.addInitialDelay = false;
+	}
+
+	public void OnStartingPlayerChosen (Player player)
+	{
+		if (this == player) {			
+			addInitialDelay = true;
+		}
+	}
+	
 
     public override void StartTurn()
     {
@@ -17,13 +36,20 @@ public class AIPlayer : Player {
 
     public override void OnTileSelected(HexTile tile)
     {
+		EventBus.INSTANCE.NotifyStartAnimation ();
         StartCoroutine(ProcessAIMove(tile));     
     }
 
     private IEnumerator ProcessAIMove(HexTile tile)
     {
-		yield return new WaitForSeconds (1f);
+		float waitTime = 1f;
+		if (addInitialDelay) {
+			waitTime += 2.5f;
+			addInitialDelay = false;
+		}
+		yield return new WaitForSeconds (waitTime);
         PlayTile(tile);
+		EventBus.INSTANCE.NotifyEndAnimation ();
     }
 		
 }

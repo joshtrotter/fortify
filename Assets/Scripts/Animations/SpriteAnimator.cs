@@ -3,22 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TileAnimator : MonoBehaviour {
+[RequireComponent(typeof(SpriteContainer))]
+public class SpriteAnimator : MonoBehaviour {
 
-	private SpriteRenderer rend;
+	private SpriteContainer spriteContainer;
 
 	void Start () {
-		rend = gameObject.GetComponent<SpriteRenderer>();	
+		spriteContainer = gameObject.GetComponent<SpriteContainer>();	
 	}
 
 	public void SetSprite(Sprite sprite) {
-		rend.sprite = sprite;
+		spriteContainer.SetSprite(sprite);
 	}
 	
 	public IEnumerator ExpandToSprite(Sprite sprite, Action onComplete, float initialScale = 0.33f, float duration = 0.20f) {
-		TileAnimator placeholder = Instantiate (this, transform.parent);
-		rend.sortingLayerName = "Overlay";
-		rend.sprite = sprite;
+		EventBus.INSTANCE.NotifyStartAnimation ();
+		SpriteAnimator placeholder = Instantiate (this, transform.parent);
+		spriteContainer.SetSortingLayer("Overlay");
+		SetSprite(sprite);
 
 		Vector3 initialExpansionSize = Vector3.one * initialScale;
 		transform.localScale = initialExpansionSize;
@@ -26,21 +28,24 @@ public class TileAnimator : MonoBehaviour {
 		yield return Expand (initialExpansionSize, duration);
 
 		Destroy (placeholder.gameObject);
-		rend.sortingLayerName = "Default";
+		spriteContainer.SetSortingLayer("Default");
 
-		if (onComplete != null) {
+		if (onComplete != null) {			
 			onComplete ();
 		}
+		EventBus.INSTANCE.NotifyEndAnimation ();
 	}
 
-	public IEnumerator FlipToSprite(Sprite sprite, Action onComplete, float endSize = 1f, float duration = 0.20f) {		
+	public IEnumerator FlipToSprite(Sprite sprite, Action onComplete, float endSize = 1f, float duration = 0.20f) {	
+		EventBus.INSTANCE.NotifyStartAnimation ();	
 		yield return Flip (transform.localScale.x, 0f, duration / 2f);
-		rend.sprite = sprite;
+		SetSprite(sprite);
 		yield return Flip (0f, endSize, duration / 2f);
 
-		if (onComplete != null) {
+		if (onComplete != null) {			
 			onComplete ();
 		}
+		EventBus.INSTANCE.NotifyEndAnimation ();
 	}
 
 	public IEnumerator Expand(Vector3 startSize, float duration) {
