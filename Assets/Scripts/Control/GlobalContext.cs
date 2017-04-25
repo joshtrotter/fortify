@@ -12,22 +12,25 @@ public class GlobalContext : MonoBehaviour {
 
 	private HexBoard board;
 
-	[SerializeField]
 	private ActionRuleSet actionRuleSet;
 
 	void Awake () {
 		if (INSTANCE == null) {
 			INSTANCE = this;
 			DontDestroyOnLoad (INSTANCE);
+		} else {
+			Destroy (gameObject);
 		}
 	}
 
+	//TODO InitialiseForGame()?
 	public void Initialise() {
 		board.Initialise ();
 		player1.Initialise ();
 		player2.Initialise ();
 	}
 
+	//TODO can we remove this now?
 	public void Reset() {
 		board.Reset ();
 		player1.Reset ();
@@ -55,6 +58,13 @@ public class GlobalContext : MonoBehaviour {
 		this.board = Instantiate(board, this.transform);
 	}
 
+	public void setActionRuleSet(ActionRuleSet actionRuleSet) {
+		if (this.actionRuleSet != null) {
+			Destroy (this.actionRuleSet.gameObject);
+		}
+		this.actionRuleSet = Instantiate(actionRuleSet, this.transform);
+	}
+
 	public Player getPlayer1() {
 		return player1;
 	}
@@ -67,7 +77,7 @@ public class GlobalContext : MonoBehaviour {
 		return board;
 	}
 
-	public ActionRuleSet getRuleSet() {
+	public ActionRuleSet getActionRuleSet() {
 		return actionRuleSet;
 	}
 

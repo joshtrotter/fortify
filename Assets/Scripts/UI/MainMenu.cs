@@ -19,11 +19,15 @@ public class MainMenu : MonoBehaviour {
 	[SerializeField]
 	private List<HexBoard> boards;
 
+	[SerializeField]
+	private ActionRuleSet actionRuleSet;
+
 	public void SinglePlayer() {
 		AssignPlayerConfigs (opponentAI);
 		GlobalContext.INSTANCE.setPlayer1 (player);
 		GlobalContext.INSTANCE.setPlayer2 (opponentAI);
 		GlobalContext.INSTANCE.setBoard (RandomBoard ());
+		GlobalContext.INSTANCE.setActionRuleSet (actionRuleSet);
 		SceneManager.LoadScene ("Game");
 	}
 
@@ -32,20 +36,25 @@ public class MainMenu : MonoBehaviour {
 		GlobalContext.INSTANCE.setPlayer1 (player);
 		GlobalContext.INSTANCE.setPlayer2 (opponentHuman);
 		GlobalContext.INSTANCE.setBoard (RandomBoard ());
+		GlobalContext.INSTANCE.setActionRuleSet (actionRuleSet);
 		SceneManager.LoadScene ("Game");
+	}
+
+	public void Tutorial() {		
+		SceneManager.LoadScene ("Tutorial");
 	}
 
 	private void AssignPlayerConfigs(Player opponent)
 	{
 		PlayerConfig playerConfig = RandomConfig ();
-		playerConfig.SetPlayerName ("Player 1");
+		playerConfig.SetPlayerName ("PLAYER 1");
 		player.SetPlayerConfig (playerConfig);
 
 		PlayerConfig opponentConfig = RandomConfig ();
 		while (opponentConfig == playerConfig) {
 			opponentConfig = RandomConfig ();
 		}
-		opponentConfig.SetPlayerName ("Player 2");
+		opponentConfig.SetPlayerName ("PLAYER 2");
 		opponent.SetPlayerConfig (opponentConfig);
 	}
 

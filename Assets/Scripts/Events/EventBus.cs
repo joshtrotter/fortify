@@ -17,7 +17,6 @@ public class EventBus : MonoBehaviour
 	void Awake () {
 		if (INSTANCE == null) {
 			INSTANCE = this;
-			DontDestroyOnLoad (INSTANCE);
 		}
 	}		
 
@@ -108,14 +107,5 @@ public class EventBus : MonoBehaviour
 		}
 	}
 
-	public void Reset() 
-	{
-		endTurnListeners.Clear ();
-		tileSelectionListeners.Clear ();
-		coinFlipListeners.Clear ();
-		startAnimationListeners.Clear ();
-		endAnimationListeners.Clear ();
-		runningAnimationCount = 0;
-	}
 }
 

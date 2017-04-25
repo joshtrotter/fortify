@@ -15,6 +15,7 @@ public class HexTile : MonoBehaviour {
 	private SpriteAnimator tileAnimator;
 	private TileState currentState = TileState.AVAILABLE;
     private HashSet<HexTile> neighbours = new HashSet<HexTile>();
+	private bool activated = true;
 
     void Start()
     {
@@ -102,6 +103,21 @@ public class HexTile : MonoBehaviour {
         return neighbours;
     }
 
+	public void Deactivate(Action onComplete) 
+	{
+		StartCoroutine(tileAnimator.TweenColor (new Color (1f, 1f, 1f, 0.5f), 0.25f, onComplete));
+		activated = false;
+	}
 
+	public void Activate(Action onComplete) 
+	{
+		StartCoroutine(tileAnimator.TweenColor (new Color (1f, 1f, 1f, 1f), 0.25f, onComplete));
+		activated = true;
+	}
+
+	public bool IsActivated() 
+	{
+		return activated;
+	}
 
 }

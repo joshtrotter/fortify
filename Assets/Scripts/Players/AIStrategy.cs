@@ -39,10 +39,12 @@ public class AIStrategy : MonoBehaviour {
 
 	private float ScoreTile(HexTile tile)
 	{
-		if (tile.Available ()) {
-			return ScoreClaimableTile (tile);
-		} else if (tile.Fortified() && tile.CurrentOwner() == player) {
-			return ScoreFortifiedTile(tile);
+		if (tile.IsActivated ()) {
+			if (tile.Available ()) {
+				return ScoreClaimableTile (tile);
+			} else if (tile.Fortified () && tile.CurrentOwner () == player) {
+				return ScoreFortifiedTile (tile);
+			}
 		}
 		return 0f;
 	}

@@ -22,6 +22,14 @@ public class SpriteContainer : MonoBehaviour {
 		}
 	}
 
+	public Color GetColor() {
+		if (rend != null) {
+			return rend.color;
+		} else {
+			return img.color;
+		}
+	}
+
 	public void SetColor(Color color) {
 		if (rend != null) {
 			rend.color = color;

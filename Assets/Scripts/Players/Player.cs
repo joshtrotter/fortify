@@ -43,7 +43,7 @@ public abstract class Player : MonoBehaviour {
 
     protected void PlayTile(HexTile tile)
     {		
-		GlobalContext.INSTANCE.getRuleSet().PlayTile(this, tile, () => EndTurn());
+		GlobalContext.INSTANCE.getActionRuleSet().PlayTile(this, tile, () => EndTurn());
     }
 
     public virtual void EndTurn()

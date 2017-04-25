@@ -35,7 +35,6 @@ public class GameMenu : MonoBehaviour, StartAnimationListener, EndAnimationListe
 
 	public void Restart() {
 		if (!waitingForAnimation) {
-			EventBus.INSTANCE.Reset ();
 			GlobalContext.INSTANCE.Reset ();
 			SceneManager.LoadScene ("Game");
 		} else {
@@ -45,7 +44,6 @@ public class GameMenu : MonoBehaviour, StartAnimationListener, EndAnimationListe
 
 	public void Home() {
 		if (!waitingForAnimation) {
-			EventBus.INSTANCE.Reset ();
 			GlobalContext.INSTANCE.Reset ();
 			SceneManager.LoadScene ("MainMenu");
 		} else {

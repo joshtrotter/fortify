@@ -3,6 +3,9 @@ using System.Collections;
 
 public class AIPlayer : Player, CoinFlipListener {
 
+	[SerializeField]
+	private float baseWaitTime = 1f;
+
     [SerializeField]
     private AIStrategy strategy;
 
@@ -42,7 +45,7 @@ public class AIPlayer : Player, CoinFlipListener {
 
     private IEnumerator ProcessAIMove(HexTile tile)
     {
-		float waitTime = 1f;
+		float waitTime = baseWaitTime;
 		if (addInitialDelay) {
 			waitTime += 2.5f;
 			addInitialDelay = false;

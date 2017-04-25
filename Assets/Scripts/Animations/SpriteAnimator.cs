@@ -8,7 +8,7 @@ public class SpriteAnimator : MonoBehaviour {
 
 	private SpriteContainer spriteContainer;
 
-	void Start () {
+	void Awake () {
 		spriteContainer = gameObject.GetComponent<SpriteContainer>();	
 	}
 
@@ -79,5 +79,19 @@ public class SpriteAnimator : MonoBehaviour {
 		if (onComplete != null) {
 			onComplete ();
 		}
-	} 
+	}
+
+	public IEnumerator TweenColor(Color to, float duration, Action onComplete) {
+		Color orig = spriteContainer.GetColor ();
+		float elapsed = 0f;
+		while (elapsed < duration) {			
+			elapsed += Time.deltaTime;
+			spriteContainer.SetColor(Color.Lerp (orig, to, elapsed / duration));
+			yield return new WaitForEndOfFrame ();
+		}
+
+		if (onComplete != null) {
+			onComplete ();
+		}
+	}
 }
