@@ -19,10 +19,13 @@ public class NotificationPanel : MonoBehaviour {
 		Hide (() => {});
 	}
 	
-	public void Reveal(string message, Action onReveal, float delay = 0f, float duration = 0.15f)
+	public void Reveal(string message, Action onReveal, float delay = 0f, float duration = 0.15f, bool playSound = false)
 	{
 		text.text = message;
 		uiAnimator.Resize (onReveal, new Vector3 (0f, 1f, 1f), Vector3.one, delay, duration);
+		if (playSound) {
+			GlobalContext.INSTANCE.getSoundController ().PlayNotification (delay);
+		}
 	}
 
 	public void Hide(Action onHide, float delay = 0f, float duration = 0.15f)

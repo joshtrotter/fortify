@@ -46,8 +46,8 @@ public class Coin : MonoBehaviour {
 	}
 
 	private void OnPlayerSelected(Player player)
-	{
-		notificationPanel.Reveal (player.PlayerName () + " Goes First!", () => Finish (player), 0.25f, 0.15f);
+	{		
+		notificationPanel.Reveal (player.PlayerName () + " Goes First!", () => Finish (player), 0.25f, 0.15f, true);
 	}
 
 	private void Finish(Player player)
@@ -59,6 +59,7 @@ public class Coin : MonoBehaviour {
 
 	private void FlipToPlayer(Player player, int increment, Action onComplete)
 	{
+		GlobalContext.INSTANCE.getSoundController ().PlayCapture ();
 		tileAnimator.SetSprite (player.PlayerSprite ());
 		float startSize = initialSize + (sizeIncrement * increment);
 		float endSize = startSize + sizeIncrement;
@@ -67,7 +68,7 @@ public class Coin : MonoBehaviour {
 	}
 
 	private void FlipToHidden(int increment, Action onComplete)
-	{
+	{		
 		float startSize = initialSize + (sizeIncrement * increment);
 		float endSize = startSize + sizeIncrement;
 		float speed = initialSpeed + (speedIncrement * increment);

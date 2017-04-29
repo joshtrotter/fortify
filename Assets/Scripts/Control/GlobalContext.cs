@@ -14,6 +14,8 @@ public class GlobalContext : MonoBehaviour {
 
 	private ActionRuleSet actionRuleSet;
 
+	private SoundController soundController;
+
 	void Awake () {
 		if (INSTANCE == null) {
 			INSTANCE = this;
@@ -29,8 +31,7 @@ public class GlobalContext : MonoBehaviour {
 		player1.Initialise ();
 		player2.Initialise ();
 	}
-
-	//TODO can we remove this now?
+		
 	public void Reset() {
 		board.Reset ();
 		player1.Reset ();
@@ -65,6 +66,13 @@ public class GlobalContext : MonoBehaviour {
 		this.actionRuleSet = Instantiate(actionRuleSet, this.transform);
 	}
 
+	public void setSoundController(SoundController soundController) {
+		if (this.soundController != null) {
+			Destroy (this.soundController.gameObject);
+		}
+		this.soundController = Instantiate(soundController, this.transform);
+	}
+
 	public Player getPlayer1() {
 		return player1;
 	}
@@ -79,6 +87,10 @@ public class GlobalContext : MonoBehaviour {
 
 	public ActionRuleSet getActionRuleSet() {
 		return actionRuleSet;
+	}
+
+	public SoundController getSoundController() {
+		return soundController;
 	}
 
 	public Player getOpponentOf(Player player) {

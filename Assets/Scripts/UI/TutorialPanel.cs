@@ -63,7 +63,7 @@ public class TutorialPanel : MonoBehaviour {
 		uiAnimator.Resize (() => HorizontalExpand(), new Vector3 (0.5f, 0f), new Vector3 (0.5f, 1f), 0.5f, 0.5f);
 	}
 
-	private void HorizontalExpand () {
+	private void HorizontalExpand () {		
 		uiAnimator.Resize (() => Step1Title(), new Vector3 (0.5f, 1f), new Vector3 (1f, 1f), 0.25f, 0.5f);
 	}
 		

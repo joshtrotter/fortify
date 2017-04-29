@@ -29,7 +29,7 @@ public class TextEffects : MonoBehaviour {
 			message = this.text.text + message;
 		}
 		float elapsed = 0f;
-		while (elapsed < duration) {
+		while (elapsed < duration) {			
 			elapsed += Time.deltaTime;
 			float len = Mathf.Lerp (0, message.Length, elapsed / duration);
 			SetText(message.Substring(0, (int)len));

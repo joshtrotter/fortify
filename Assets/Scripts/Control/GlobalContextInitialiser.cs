@@ -16,16 +16,35 @@ public class GlobalContextInitialiser : MonoBehaviour {
 	[SerializeField]
 	private ActionRuleSet ruleSet;
 
-	void Start () {
-		GlobalContext.INSTANCE.setPlayer1 (player1);
-		GlobalContext.INSTANCE.setPlayer2 (player2);
-		GlobalContext.INSTANCE.setBoard (board);
-		GlobalContext.INSTANCE.setActionRuleSet (ruleSet);
+	[SerializeField]
+	private SoundController soundController;
 
-		Destroy (player1.gameObject);
-		Destroy (player2.gameObject);
-		Destroy (board.gameObject);
-		Destroy (ruleSet.gameObject);
+	void Start () {
+		if (player1 != null) {
+			GlobalContext.INSTANCE.setPlayer1 (player1);
+			Destroy (player1.gameObject);
+		}
+
+		if (player2 != null) {
+			GlobalContext.INSTANCE.setPlayer2 (player2);
+			Destroy (player2.gameObject);
+		}
+
+		if (board != null) {
+			GlobalContext.INSTANCE.setBoard (board);
+			Destroy (board.gameObject);
+		}
+
+		if (ruleSet != null) {
+			GlobalContext.INSTANCE.setActionRuleSet (ruleSet);
+			Destroy (ruleSet.gameObject);
+		}
+
+		if (soundController != null) {
+			GlobalContext.INSTANCE.setSoundController (soundController);
+			Destroy (soundController.gameObject);
+		}			
+
 	}
 
 }

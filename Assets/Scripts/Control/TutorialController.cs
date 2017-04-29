@@ -84,7 +84,7 @@ public class TutorialController : MonoBehaviour, EndTurnListener {
 
 	private void Step1()
 	{
-		gamePanel.Reveal ("Click to claim the tile!", () => Step1WaitForInput());
+		gamePanel.Reveal ("Click to claim the tile!", () => Step1WaitForInput(), 0f, 0.15f, true);
 		foreach (HexTile tile in GlobalContext.INSTANCE.getBoard ().Tiles()) {
 			if (tile.name != "Step1") {				
 				tile.Deactivate (() => {});
@@ -128,7 +128,7 @@ public class TutorialController : MonoBehaviour, EndTurnListener {
 
 	private void Step3()
 	{
-		gamePanel.Reveal ("Click to capture tiles!", () => Step3WaitForInput());
+		gamePanel.Reveal ("Click to capture tiles!", () => Step3WaitForInput(), 0f, 0.15f, true);
 		foreach (HexTile tile in GlobalContext.INSTANCE.getBoard ().Tiles()) {
 			if (tile.name != "Step1" && tile.name != "Step2" && tile.name != "Step3") {				
 				tile.Deactivate (() => {});
@@ -175,7 +175,7 @@ public class TutorialController : MonoBehaviour, EndTurnListener {
 	}
 
 	private void Step5() {
-		gamePanel.Reveal ("Click to fortify a tile!", () => Step5WaitForInput());
+		gamePanel.Reveal ("Click to fortify a tile!", () => Step5WaitForInput(), 0f, 0.15f, true);
 		foreach (HexTile tile in GlobalContext.INSTANCE.getBoard ().Tiles()) {
 			if (tile.name != "Step1" && tile.name != "Step2" && tile.name != "Step3" && tile.name != "Step4" && tile.name != "Step5") {				
 				tile.Deactivate (() => {});
@@ -223,7 +223,7 @@ public class TutorialController : MonoBehaviour, EndTurnListener {
 	}
 
 	private void Step7() {
-		gamePanel.Reveal ("Click to re-fortify the tile!", () => Step7WaitForInput());
+		gamePanel.Reveal ("Click to re-fortify the tile!", () => Step7WaitForInput(), 0f, 0.15f, true);
 		foreach (HexTile tile in GlobalContext.INSTANCE.getBoard ().Tiles()) {
 			if (tile.name != "Step1" && tile.name != "Step2" && tile.name != "Step3" && tile.name != "Step4" && tile.name != "Step5" && tile.name != "Step6" && tile.name != "Step7") {				
 				tile.Deactivate (() => {});
@@ -270,7 +270,7 @@ public class TutorialController : MonoBehaviour, EndTurnListener {
 	}
 
 	private void Step9() {
-		gamePanel.Reveal ("Click to sacrifice the tile!", () => Step9WaitForInput());
+		gamePanel.Reveal ("Click to sacrifice the tile!", () => Step9WaitForInput(), 0f, 0.15f, true);
 		foreach (HexTile tile in GlobalContext.INSTANCE.getBoard ().Tiles()) {
 			if (tile.name != "Step1" && tile.name != "Step2" && tile.name != "Step3" && tile.name != "Step4" && tile.name != "Step5" && tile.name != "Step6" && tile.name != "Step7" && tile.name != "Step8") {				
 				tile.Deactivate (() => {});
@@ -346,10 +346,10 @@ public class TutorialController : MonoBehaviour, EndTurnListener {
 	{
 		if (player1.ClaimedTileCount() > player2.ClaimedTileCount())
 		{
-			gamePanel.Reveal (player1.PlayerName () + " Wins!", () => {});
+			gamePanel.Reveal (player1.PlayerName () + " Wins!", () => {}, 0f, 0.15f, true);
 		} else
 		{
-			gamePanel.Reveal (player2.PlayerName () + " Wins!", () => {});
+			gamePanel.Reveal (player2.PlayerName () + " Wins!", () => {}, 0f, 0.15f, true);
 		}
 	}
 }

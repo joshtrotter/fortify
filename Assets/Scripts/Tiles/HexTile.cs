@@ -3,7 +3,7 @@ using System.Collections;
 using System;
 using UnityEngine;
 
-[RequireComponent(typeof(SpriteContainer))]
+[RequireComponent(typeof(SpriteAnimator))]
 public class HexTile : MonoBehaviour {
 
     private enum TileState { AVAILABLE, CLAIMED, FORTIFIED };
@@ -17,7 +17,7 @@ public class HexTile : MonoBehaviour {
     private HashSet<HexTile> neighbours = new HashSet<HexTile>();
 	private bool activated = true;
 
-    void Start()
+    void Awake()
     {
 		tileAnimator = gameObject.GetComponent<SpriteAnimator> ();
     }
@@ -43,8 +43,10 @@ public class HexTile : MonoBehaviour {
     public void Claim(Player player, Action onComplete)
     {		
 		if (owner == player.Opponent()) {
+			GlobalContext.INSTANCE.getSoundController ().PlayCapture ();
 			StartCoroutine(tileAnimator.FlipToSprite(player.PlayerSprite(), onComplete));
 		} else {
+			GlobalContext.INSTANCE.getSoundController ().PlayClaim ();
 			StartCoroutine(tileAnimator.ExpandToSprite(player.PlayerSprite(), onComplete));
 		}
 
@@ -60,6 +62,7 @@ public class HexTile : MonoBehaviour {
 	public void ApplyFortify(Action onComplete)
     {
         currentState = TileState.FORTIFIED;
+		GlobalContext.INSTANCE.getSoundController ().PlayFortify ();
 		StartCoroutine(tileAnimator.ExpandToSprite(owner.FortifySprite(), onComplete));
     }
 
@@ -70,8 +73,20 @@ public class HexTile : MonoBehaviour {
 	public void RemoveFortify(Action onComplete)
     {
         currentState = TileState.CLAIMED;
+		GlobalContext.INSTANCE.getSoundController ().PlayDefortify ();
 		StartCoroutine(tileAnimator.ExpandToSprite(owner.PlayerSprite(), onComplete));
     }
+
+	public void Sacrifice() {
+		Sacrifice (null);
+	}
+
+	public void Sacrifice(Action onComplete)
+	{
+		currentState = TileState.CLAIMED;
+		GlobalContext.INSTANCE.getSoundController ().PlaySacrifice ();
+		StartCoroutine(tileAnimator.SacrificeAnimation(owner.PlayerSprite(), onComplete, 0.33f, 0.2f));
+	}
 
     public bool Available()
     {

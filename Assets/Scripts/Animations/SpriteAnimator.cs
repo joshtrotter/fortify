@@ -15,6 +15,29 @@ public class SpriteAnimator : MonoBehaviour {
 	public void SetSprite(Sprite sprite) {
 		spriteContainer.SetSprite(sprite);
 	}
+
+	public IEnumerator SacrificeAnimation(Sprite sprite, Action onComplete, float initialScale = 0.33f, float duration = 0.20f, float expansionSize = 1.66f) {
+		EventBus.INSTANCE.NotifyStartAnimation ();
+		SpriteAnimator placeholder = Instantiate (this, transform.parent);
+		spriteContainer.SetSortingLayer("Overlay");
+		SetSprite(sprite);
+
+		Vector3 initialExpansionSize = Vector3.one * initialScale;
+		transform.localScale = initialExpansionSize;
+
+		yield return StartCoroutine (placeholder.Expand (Vector3.one, Vector3.one * expansionSize, duration));
+		StartCoroutine (placeholder.Expand (Vector3.one * expansionSize, Vector3.one, duration));
+		yield return Expand (initialExpansionSize, Vector3.one, duration);
+
+		Destroy (placeholder.gameObject);
+		spriteContainer.SetSortingLayer("Default");
+
+		if (onComplete != null) {			
+			onComplete ();
+		}
+
+		EventBus.INSTANCE.NotifyEndAnimation ();
+	}
 	
 	public IEnumerator ExpandToSprite(Sprite sprite, Action onComplete, float initialScale = 0.33f, float duration = 0.20f) {
 		EventBus.INSTANCE.NotifyStartAnimation ();
@@ -25,14 +48,16 @@ public class SpriteAnimator : MonoBehaviour {
 		Vector3 initialExpansionSize = Vector3.one * initialScale;
 		transform.localScale = initialExpansionSize;
 
-		yield return Expand (initialExpansionSize, duration);
-
+		yield return Expand (initialExpansionSize, Vector3.one, duration);
+			
 		Destroy (placeholder.gameObject);
 		spriteContainer.SetSortingLayer("Default");
 
 		if (onComplete != null) {			
 			onComplete ();
 		}
+
+
 		EventBus.INSTANCE.NotifyEndAnimation ();
 	}
 
@@ -48,12 +73,12 @@ public class SpriteAnimator : MonoBehaviour {
 		EventBus.INSTANCE.NotifyEndAnimation ();
 	}
 
-	public IEnumerator Expand(Vector3 startSize, float duration) {
+	public IEnumerator Expand(Vector3 startSize, Vector3 endSize, float duration) {
 		float elapsed = 0f;
 		do {			
 			yield return new WaitForEndOfFrame ();
 			elapsed += Time.deltaTime;
-			transform.localScale = Vector3.Lerp (startSize, Vector3.one, elapsed / duration);
+			transform.localScale = Vector3.Lerp (startSize, endSize, elapsed / duration);
 		} while (elapsed < duration);
 	}
 

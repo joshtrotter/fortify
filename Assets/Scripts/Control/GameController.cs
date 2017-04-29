@@ -70,10 +70,10 @@ public class GameController : MonoBehaviour, EndTurnListener, CoinFlipListener {
     {
         if (player1.ClaimedTileCount() > player2.ClaimedTileCount())
         {
-			notificationPanel.Reveal (player1.PlayerName () + " Wins!", () => {});
+			notificationPanel.Reveal (player1.PlayerName () + " Wins!", () => {}, 0f, 0.15f, true);
         } else
         {
-			notificationPanel.Reveal (player2.PlayerName () + " Wins!", () => {});
+			notificationPanel.Reveal (player2.PlayerName () + " Wins!", () => {}, 0f, 0.15f, true);
         }
     }
 	

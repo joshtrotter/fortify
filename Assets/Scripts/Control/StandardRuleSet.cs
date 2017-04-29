@@ -31,7 +31,7 @@ public class StandardRuleSet : ActionRuleSet
 
 	private void Sacrifice (Player player, HexTile tile, Action onComplete)
 	{
-		tile.RemoveFortify (() => {
+		tile.Sacrifice (() => {
 			foreach (HexTile neighbour in tile.Neighbours()) {
 				if (neighbour.CurrentOwner () == player.Opponent ()) {
 					InfluenceOpponentTile (player, neighbour);

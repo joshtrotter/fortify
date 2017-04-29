@@ -22,12 +22,16 @@ public class MainMenu : MonoBehaviour {
 	[SerializeField]
 	private ActionRuleSet actionRuleSet;
 
+	[SerializeField]
+	private SoundController soundController;
+
 	public void SinglePlayer() {
 		AssignPlayerConfigs (opponentAI);
 		GlobalContext.INSTANCE.setPlayer1 (player);
 		GlobalContext.INSTANCE.setPlayer2 (opponentAI);
 		GlobalContext.INSTANCE.setBoard (RandomBoard ());
 		GlobalContext.INSTANCE.setActionRuleSet (actionRuleSet);
+		GlobalContext.INSTANCE.setSoundController (soundController);
 		SceneManager.LoadScene ("Game");
 	}
 
@@ -37,10 +41,13 @@ public class MainMenu : MonoBehaviour {
 		GlobalContext.INSTANCE.setPlayer2 (opponentHuman);
 		GlobalContext.INSTANCE.setBoard (RandomBoard ());
 		GlobalContext.INSTANCE.setActionRuleSet (actionRuleSet);
+		GlobalContext.INSTANCE.setSoundController (soundController);
 		SceneManager.LoadScene ("Game");
 	}
 
-	public void Tutorial() {		
+	public void Tutorial() {	
+		GlobalContext.INSTANCE.setActionRuleSet (actionRuleSet);
+		GlobalContext.INSTANCE.setSoundController (soundController);	
 		SceneManager.LoadScene ("Tutorial");
 	}
 
