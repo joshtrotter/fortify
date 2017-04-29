@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using UnityEngine.SceneManagement;
 
-public class TutorialController : MonoBehaviour, EndTurnListener {
+public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyListener {
 
 	private Player player1;
 	private Player player2;
@@ -39,7 +39,6 @@ public class TutorialController : MonoBehaviour, EndTurnListener {
 
 	void Start () {
 		Initialise ();
-		StartTutorial ();
 	}
 
 	public void Initialise() {
@@ -52,6 +51,12 @@ public class TutorialController : MonoBehaviour, EndTurnListener {
 		player2UI.InitialiseForPlayer (player2);
 
 		EventBus.INSTANCE.RegisterEndTurnListener (this);
+		EventBus.INSTANCE.RegisterBoardReadyListener (this);
+	}
+
+	public void OnBoardReady()
+	{
+		StartTutorial ();
 	}
 
 	private void StartTutorial() 

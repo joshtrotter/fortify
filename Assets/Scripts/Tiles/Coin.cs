@@ -24,7 +24,7 @@ public class Coin : MonoBehaviour {
 	public void Toss(Player player1, Player player2) 
 	{
 		tileAnimator.SetSprite (player1.PlayerSprite ());
-		Flip (player2, player1);
+		tileAnimator.AnimateExpand (Vector3.zero, Vector3.one, 0.2f, () => Flip(player2, player1));
 	}
 
 	private void Flip(Player to, Player from, int flipCount = 0) 
@@ -53,7 +53,7 @@ public class Coin : MonoBehaviour {
 	private void Finish(Player player)
 	{
 		EventBus.INSTANCE.NotifyCoinFlip (player);
-		gameObject.SetActive(false);
+		tileAnimator.AnimateExpand(transform.localScale, Vector3.zero, 0.2f, () => gameObject.SetActive(false));
 	}
 
 

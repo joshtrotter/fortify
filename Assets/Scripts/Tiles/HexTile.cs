@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections;
-using System;
 using UnityEngine;
+using System;
+
 
 [RequireComponent(typeof(SpriteAnimator))]
 public class HexTile : MonoBehaviour {
@@ -10,6 +11,12 @@ public class HexTile : MonoBehaviour {
 
 	[SerializeField]
 	private Sprite defaultSprite;
+
+	[SerializeField]
+	private float baseValue = 0f;
+
+	[SerializeField]
+	private float randomValueVariance = 0f;
 
     private Player owner;
 	private SpriteAnimator tileAnimator;
@@ -27,12 +34,19 @@ public class HexTile : MonoBehaviour {
 		EventBus.INSTANCE.NotifyTileSelection (this);        
     }
 
+	public void Initialise()
+	{
+		GlobalContext.INSTANCE.getSoundController ().PlayClaim ();
+		tileAnimator.AnimateExpand (Vector3.zero, Vector3.one, 0.2f, () => {});
+	}
+
 	public void Reset()
 	{
 		currentState = TileState.AVAILABLE;
 		tileAnimator.SetSprite (defaultSprite);
 		neighbours.Clear ();
 		owner = null;
+		transform.localScale = Vector3.zero;
 	}
 
 	public void Claim(Player player) 
@@ -133,6 +147,11 @@ public class HexTile : MonoBehaviour {
 	public bool IsActivated() 
 	{
 		return activated;
+	}
+
+	public float TileValue()
+	{
+		return baseValue + UnityEngine.Random.Range (0f, randomValueVariance);
 	}
 
 }

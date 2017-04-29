@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class GameController : MonoBehaviour, EndTurnListener, CoinFlipListener {
+public class GameController : MonoBehaviour, EndTurnListener, CoinFlipListener, BoardReadyListener {
 
     private Player player1;
     private Player player2;
@@ -22,7 +22,6 @@ public class GameController : MonoBehaviour, EndTurnListener, CoinFlipListener {
 
 	void Start () {
 		Initialise ();
-		StartGame ();
 	}
 	    
 	public void Initialise() {
@@ -36,9 +35,10 @@ public class GameController : MonoBehaviour, EndTurnListener, CoinFlipListener {
 
 		EventBus.INSTANCE.RegisterEndTurnListener (this);
 		EventBus.INSTANCE.RegisterCoinFlipListener (this);
+		EventBus.INSTANCE.RegisterBoardReadyListener (this);
 	}
-
-	public void StartGame() 
+		
+	public void OnBoardReady()
 	{
 		coin.Toss (player1, player2);
 	}

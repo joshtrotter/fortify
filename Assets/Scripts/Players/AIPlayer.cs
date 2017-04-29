@@ -6,6 +6,9 @@ public class AIPlayer : Player, CoinFlipListener {
 	[SerializeField]
 	private float baseWaitTime = 1f;
 
+	[SerializeField]
+	private float firstTurnExtraWaitTime = 1.5f;
+
     [SerializeField]
     private AIStrategy strategy;
 
@@ -22,6 +25,7 @@ public class AIPlayer : Player, CoinFlipListener {
 	{
 		base.Reset ();
 		this.addInitialDelay = false;
+		StopAllCoroutines ();
 	}
 
 	public void OnStartingPlayerChosen (Player player)
@@ -38,8 +42,7 @@ public class AIPlayer : Player, CoinFlipListener {
     }
 
     public override void OnTileSelected(HexTile tile)
-    {
-		EventBus.INSTANCE.NotifyStartAnimation ();
+    {		
         StartCoroutine(ProcessAIMove(tile));     
     }
 
@@ -47,12 +50,11 @@ public class AIPlayer : Player, CoinFlipListener {
     {
 		float waitTime = baseWaitTime;
 		if (addInitialDelay) {
-			waitTime += 2.5f;
+			waitTime += firstTurnExtraWaitTime;
 			addInitialDelay = false;
 		}
 		yield return new WaitForSeconds (waitTime);
         PlayTile(tile);
-		EventBus.INSTANCE.NotifyEndAnimation ();
     }
 		
 }

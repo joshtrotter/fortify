@@ -11,6 +11,7 @@ public class EventBus : MonoBehaviour
 	private HashSet<CoinFlipListener> coinFlipListeners = new HashSet<CoinFlipListener> ();
 	private HashSet<StartAnimationListener> startAnimationListeners = new HashSet<StartAnimationListener> ();
 	private HashSet<EndAnimationListener> endAnimationListeners = new HashSet<EndAnimationListener> ();
+	private HashSet<BoardReadyListener> boardReadyListeners = new HashSet<BoardReadyListener> ();
 
 	private int runningAnimationCount = 0;
 
@@ -104,6 +105,23 @@ public class EventBus : MonoBehaviour
 		runningAnimationCount--;
 		foreach (EndAnimationListener listener in endAnimationListeners) {
 			listener.OnAnimationEnd (runningAnimationCount);
+		}
+	}
+
+	public void RegisterBoardReadyListener(BoardReadyListener listener) 
+	{
+		boardReadyListeners.Add (listener);
+	}
+
+	public void DeregisterBoardReadyListener(BoardReadyListener listener)
+	{
+		boardReadyListeners.Remove (listener);
+	}
+
+	public void NotifyBoardReady()
+	{
+		foreach (BoardReadyListener listener in boardReadyListeners) {
+			listener.OnBoardReady ();
 		}
 	}
 

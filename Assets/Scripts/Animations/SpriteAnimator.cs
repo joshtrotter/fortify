@@ -25,9 +25,9 @@ public class SpriteAnimator : MonoBehaviour {
 		Vector3 initialExpansionSize = Vector3.one * initialScale;
 		transform.localScale = initialExpansionSize;
 
-		yield return StartCoroutine (placeholder.Expand (Vector3.one, Vector3.one * expansionSize, duration));
-		StartCoroutine (placeholder.Expand (Vector3.one * expansionSize, Vector3.one, duration));
-		yield return Expand (initialExpansionSize, Vector3.one, duration);
+		yield return placeholder.Expand (Vector3.one, Vector3.one * expansionSize, duration, () => {});
+		placeholder.AnimateExpand (Vector3.one * expansionSize, Vector3.one, duration, () => {});
+		yield return Expand (initialExpansionSize, Vector3.one, duration, () => {});
 
 		Destroy (placeholder.gameObject);
 		spriteContainer.SetSortingLayer("Default");
@@ -48,7 +48,7 @@ public class SpriteAnimator : MonoBehaviour {
 		Vector3 initialExpansionSize = Vector3.one * initialScale;
 		transform.localScale = initialExpansionSize;
 
-		yield return Expand (initialExpansionSize, Vector3.one, duration);
+		yield return Expand (initialExpansionSize, Vector3.one, duration, () => {});
 			
 		Destroy (placeholder.gameObject);
 		spriteContainer.SetSortingLayer("Default");
@@ -73,13 +73,20 @@ public class SpriteAnimator : MonoBehaviour {
 		EventBus.INSTANCE.NotifyEndAnimation ();
 	}
 
-	public IEnumerator Expand(Vector3 startSize, Vector3 endSize, float duration) {
+	public void AnimateExpand(Vector3 startSize, Vector3 endSize, float duration, Action onComplete) {
+		StartCoroutine(Expand(startSize, endSize, duration, onComplete));
+	}
+
+	public IEnumerator Expand(Vector3 startSize, Vector3 endSize, float duration, Action onComplete) {
 		float elapsed = 0f;
 		do {			
 			yield return new WaitForEndOfFrame ();
 			elapsed += Time.deltaTime;
 			transform.localScale = Vector3.Lerp (startSize, endSize, elapsed / duration);
 		} while (elapsed < duration);
+		if (onComplete != null) {
+			onComplete ();
+		}
 	}
 
 	public IEnumerator Flip(float startSize, float endSize, float duration) {

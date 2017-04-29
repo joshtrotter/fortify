@@ -51,7 +51,7 @@ public class AIStrategy : MonoBehaviour {
 
 	private float ScoreClaimableTile(HexTile tile) 
 	{
-		float currentScore = 0f;
+		float currentScore = tile.TileValue();
 		int claimableNeighbours = 0;
 
 		foreach (HexTile neighbour in tile.Neighbours()) 

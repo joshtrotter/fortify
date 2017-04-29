@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 // Scans all HexTiles that are children of the HexBoard and associates the tile with it's neighbours.
@@ -14,6 +15,24 @@ public class HexBoard : MonoBehaviour {
 		gameObject.SetActive (true);
 		tiles = new List<HexTile>(gameObject.GetComponentsInChildren<HexTile>());
 		ConfigureTileNeighbours();
+		StartCoroutine (DrawInTiles ());
+	}
+
+	public IEnumerator DrawInTiles() {
+		tiles.Sort (delegate(HexTile x, HexTile y) {
+			Vector3 t1 = x.transform.position;
+			Vector3 t2 = y.transform.position;
+
+			return t1.y == t2.y ? (int)(t1.x - t2.x) : (int)(t2.y - t1.y); 
+		});
+
+		foreach (HexTile tile in tiles)
+		{
+			tile.Initialise ();
+			yield return new WaitForSeconds (0.025f);
+		}
+		yield return new WaitForSeconds (0.15f);
+		EventBus.INSTANCE.NotifyBoardReady ();
 	}
 
 	public void Reset()
