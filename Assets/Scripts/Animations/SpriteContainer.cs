@@ -8,7 +8,7 @@ public class SpriteContainer : MonoBehaviour {
 	private SpriteRenderer rend;
 	private Image img;
 
-	void Start () {
+	void Awake () {
 		rend = gameObject.GetComponent<SpriteRenderer>();	
 		img = gameObject.GetComponent<Image> ();
 	}

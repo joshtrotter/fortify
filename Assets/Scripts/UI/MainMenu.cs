@@ -51,6 +51,12 @@ public class MainMenu : MonoBehaviour {
 		SceneManager.LoadScene ("Tutorial");
 	}
 
+	public void Challenges() {	
+		GlobalContext.INSTANCE.setActionRuleSet (actionRuleSet);
+		GlobalContext.INSTANCE.setSoundController (soundController);	
+		SceneManager.LoadScene ("ChallengeMenu");
+	}
+
 	private void AssignPlayerConfigs(Player opponent)
 	{
 		PlayerConfig playerConfig = RandomConfig ();

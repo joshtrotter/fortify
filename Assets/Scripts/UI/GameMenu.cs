@@ -36,7 +36,7 @@ public class GameMenu : MonoBehaviour, StartAnimationListener, EndAnimationListe
 	public void Restart() {
 		if (!waitingForAnimation) {
 			GlobalContext.INSTANCE.Reset ();
-			SceneManager.LoadScene ("Game");
+			SceneManager.LoadScene (SceneManager.GetActiveScene().name);
 		} else {
 			restartQueued = true;
 		}

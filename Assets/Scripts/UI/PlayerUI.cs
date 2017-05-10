@@ -45,21 +45,21 @@ public class PlayerUI : MonoBehaviour, EndTurnListener, CoinFlipListener {
 		UpdateScore ();
 	}
 		
-	private void FadeIn()
+	public void FadeIn()
 	{
 		fadedIn = true;
 		playerName.color = Color.white;
 		score.color = Color.white;
 	}
 
-	private void FadeOut() 
+	public void FadeOut() 
 	{
 		fadedIn = false;
 		playerName.color = fadeOutColor;
 		score.color = fadeOutColor;
 	}
 
-    private void UpdateScore()
+    public void UpdateScore()
     {
 		this.score.text = "" + player.ClaimedTileCount();
     }

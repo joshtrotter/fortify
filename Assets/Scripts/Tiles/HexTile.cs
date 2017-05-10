@@ -7,7 +7,7 @@ using System;
 [RequireComponent(typeof(SpriteAnimator))]
 public class HexTile : MonoBehaviour {
 
-    private enum TileState { AVAILABLE, CLAIMED, FORTIFIED };
+    public enum TileState { AVAILABLE, CLAIMED, FORTIFIED };
 
 	[SerializeField]
 	private Sprite defaultSprite;
@@ -47,6 +47,14 @@ public class HexTile : MonoBehaviour {
 		neighbours.Clear ();
 		owner = null;
 		transform.localScale = Vector3.zero;
+	}
+
+	public void SetToState(TileState state, Player owner, Sprite sprite, bool activated)
+	{
+		this.currentState = state;
+		this.owner = owner;
+		this.activated = activated;
+		tileAnimator.AnimateExpandToSprite (sprite, () => {});
 	}
 
 	public void Claim(Player player) 

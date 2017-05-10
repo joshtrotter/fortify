@@ -38,6 +38,10 @@ public class SpriteAnimator : MonoBehaviour {
 
 		EventBus.INSTANCE.NotifyEndAnimation ();
 	}
+
+	public void AnimateExpandToSprite(Sprite sprite, Action onComplete, float initialScale = 0.33f, float duration = 0.20f) {
+		StartCoroutine (ExpandToSprite(sprite, onComplete, initialScale, duration));
+	}
 	
 	public IEnumerator ExpandToSprite(Sprite sprite, Action onComplete, float initialScale = 0.33f, float duration = 0.20f) {
 		EventBus.INSTANCE.NotifyStartAnimation ();
