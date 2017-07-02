@@ -24,7 +24,7 @@ public class NotificationPanel : MonoBehaviour {
 		text.text = message;
 		uiAnimator.Resize (onReveal, new Vector3 (0f, 1f, 1f), Vector3.one, delay, duration);
 		if (playSound) {
-			GlobalContext.INSTANCE.getSoundController ().PlayNotification (delay);
+			SoundController.INSTANCE.PlayNotification (delay);
 		}
 	}
 

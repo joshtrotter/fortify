@@ -12,10 +12,6 @@ public class GlobalContext : MonoBehaviour {
 
 	private HexBoard board;
 
-	private ActionRuleSet actionRuleSet;
-
-	private SoundController soundController;
-
 	void Awake () {
 		if (INSTANCE == null) {
 			INSTANCE = this;
@@ -27,15 +23,11 @@ public class GlobalContext : MonoBehaviour {
 
 	//TODO InitialiseForGame()?
 	public void Initialise() {
-		board.Initialise ();
-		player1.Initialise ();
-		player2.Initialise ();
+		
 	}
 		
 	public void Reset() {
-		board.Reset ();
-		player1.Reset ();
-		player2.Reset ();
+		
 	}
 
 	public void setPlayer1(Player player1) {
@@ -59,20 +51,6 @@ public class GlobalContext : MonoBehaviour {
 		this.board = Instantiate(board, this.transform);
 	}
 
-	public void setActionRuleSet(ActionRuleSet actionRuleSet) {
-		if (this.actionRuleSet != null) {
-			Destroy (this.actionRuleSet.gameObject);
-		}
-		this.actionRuleSet = Instantiate(actionRuleSet, this.transform);
-	}
-
-	public void setSoundController(SoundController soundController) {
-		if (this.soundController != null) {
-			Destroy (this.soundController.gameObject);
-		}
-		this.soundController = Instantiate(soundController, this.transform);
-	}
-
 	public Player getPlayer1() {
 		return player1;
 	}
@@ -83,18 +61,6 @@ public class GlobalContext : MonoBehaviour {
 
 	public HexBoard getBoard() {
 		return board;
-	}
-
-	public ActionRuleSet getActionRuleSet() {
-		return actionRuleSet;
-	}
-
-	public SoundController getSoundController() {
-		return soundController;
-	}
-
-	public Player getOpponentOf(Player player) {
-		return player == player1 ? player2 : player1;
 	}
 
 }

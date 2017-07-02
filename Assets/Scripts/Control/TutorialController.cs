@@ -6,7 +6,10 @@ using UnityEngine.SceneManagement;
 
 public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyListener {
 
+	[SerializeField]
 	private Player player1;
+
+	[SerializeField]
 	private Player player2;
 
 	[SerializeField]
@@ -33,29 +36,25 @@ public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyList
 	[SerializeField]
 	private TileHighlight step7Highlight;
 
-	private int tileCount;
+	private HexBoard board;
 
 	private int tutorialState = 0;
 
 	void Start () {
+		EventBus.INSTANCE.RegisterEndTurnListener (this);
+		EventBus.INSTANCE.RegisterBoardReadyListener (this);
+
 		Initialise ();
 	}
 
-	public void Initialise() {
-		GlobalContext.INSTANCE.Initialise ();
-		player1 = GlobalContext.INSTANCE.getPlayer1 ();
-		player2 = GlobalContext.INSTANCE.getPlayer2 ();
-		tileCount = GlobalContext.INSTANCE.getBoard ().Tiles().Count;        
-
+	public void Initialise() {	
 		player1UI.InitialiseForPlayer (player1);
 		player2UI.InitialiseForPlayer (player2);
-
-		EventBus.INSTANCE.RegisterEndTurnListener (this);
-		EventBus.INSTANCE.RegisterBoardReadyListener (this);
 	}
 
-	public void OnBoardReady()
+	public void OnBoardReady(HexBoard board)
 	{
+		this.board = board;       
 		StartTutorial ();
 	}
 
@@ -81,7 +80,6 @@ public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyList
 		} else if (tutorialState == 9) {
 			tutorialPanel.HideButton (() => Step9 ());
 		} else if (tutorialState == 10) {
-			GlobalContext.INSTANCE.Reset ();
 			SceneManager.LoadScene ("MainMenu");
 		}
 	}
@@ -90,7 +88,7 @@ public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyList
 	private void Step1()
 	{
 		gamePanel.Reveal ("Click to claim the tile!", () => Step1WaitForInput(), 0f, 0.15f, true);
-		foreach (HexTile tile in GlobalContext.INSTANCE.getBoard ().Tiles()) {
+		foreach (HexTile tile in board.Tiles()) {
 			if (tile.name != "Step1") {				
 				tile.Deactivate (() => {});
 			}
@@ -104,7 +102,7 @@ public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyList
 	}
 
 	private void Step1Complete() {
-		foreach (HexTile tile in GlobalContext.INSTANCE.getBoard ().Tiles()) {
+		foreach (HexTile tile in board.Tiles()) {
 			tile.Activate (() => {});
 		}
 		step1Highlight.gameObject.SetActive(false);
@@ -113,7 +111,7 @@ public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyList
 	}
 
 	private void Step2() {
-		foreach (HexTile tile in GlobalContext.INSTANCE.getBoard ().Tiles()) {
+		foreach (HexTile tile in board.Tiles()) {
 			if (tile.name == "Step2") {
 				tile.Activate (() => player2.StartTurn ());
 			}
@@ -124,7 +122,7 @@ public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyList
 	}
 
 	private void Step2Complete() {
-		foreach (HexTile tile in GlobalContext.INSTANCE.getBoard ().Tiles()) {
+		foreach (HexTile tile in board.Tiles()) {
 			tile.Activate (() => {});
 		}
 		tutorialState = 3;
@@ -134,7 +132,7 @@ public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyList
 	private void Step3()
 	{
 		gamePanel.Reveal ("Click to capture tiles!", () => Step3WaitForInput(), 0f, 0.15f, true);
-		foreach (HexTile tile in GlobalContext.INSTANCE.getBoard ().Tiles()) {
+		foreach (HexTile tile in board.Tiles()) {
 			if (tile.name != "Step1" && tile.name != "Step2" && tile.name != "Step3") {				
 				tile.Deactivate (() => {});
 			}
@@ -148,7 +146,7 @@ public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyList
 
 	private void Step3Complete() {
 		tutorialState = 4;
-		foreach (HexTile tile in GlobalContext.INSTANCE.getBoard ().Tiles()) {
+		foreach (HexTile tile in board.Tiles()) {
 			tile.Activate (() => {});
 		}
 		step3Highlight.gameObject.SetActive(false);
@@ -161,7 +159,7 @@ public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyList
 	}
 
 	private void Step4() {
-		foreach (HexTile tile in GlobalContext.INSTANCE.getBoard ().Tiles()) {
+		foreach (HexTile tile in board.Tiles()) {
 			if (tile.name == "Step4") {
 				tile.Activate (() => player2.StartTurn ());
 			}
@@ -172,7 +170,7 @@ public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyList
 	}
 
 	private void Step4Complete() {
-		foreach (HexTile tile in GlobalContext.INSTANCE.getBoard ().Tiles()) {
+		foreach (HexTile tile in board.Tiles()) {
 			tile.Activate (() => {});
 		}
 		tutorialState = 5;
@@ -181,7 +179,7 @@ public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyList
 
 	private void Step5() {
 		gamePanel.Reveal ("Click to fortify a tile!", () => Step5WaitForInput(), 0f, 0.15f, true);
-		foreach (HexTile tile in GlobalContext.INSTANCE.getBoard ().Tiles()) {
+		foreach (HexTile tile in board.Tiles()) {
 			if (tile.name != "Step1" && tile.name != "Step2" && tile.name != "Step3" && tile.name != "Step4" && tile.name != "Step5") {				
 				tile.Deactivate (() => {});
 			}
@@ -194,7 +192,7 @@ public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyList
 	}
 
 	private void Step5Complete() {
-		foreach (HexTile tile in GlobalContext.INSTANCE.getBoard ().Tiles()) {
+		foreach (HexTile tile in board.Tiles()) {
 			tile.Activate (() => {});
 		}
 		step5Highlight.gameObject.SetActive(false);
@@ -204,7 +202,7 @@ public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyList
 	}
 
 	private void Step6() {
-		foreach (HexTile tile in GlobalContext.INSTANCE.getBoard ().Tiles()) {
+		foreach (HexTile tile in board.Tiles()) {
 			if (tile.name == "Step6") {
 				tile.Activate (() => player2.StartTurn ());
 			}
@@ -215,7 +213,7 @@ public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyList
 	}
 
 	private void Step6Complete() {
-		foreach (HexTile tile in GlobalContext.INSTANCE.getBoard ().Tiles()) {
+		foreach (HexTile tile in board.Tiles()) {
 			tile.Activate (() => {});
 		}
 		tutorialState = 7;
@@ -229,7 +227,7 @@ public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyList
 
 	private void Step7() {
 		gamePanel.Reveal ("Click to re-fortify the tile!", () => Step7WaitForInput(), 0f, 0.15f, true);
-		foreach (HexTile tile in GlobalContext.INSTANCE.getBoard ().Tiles()) {
+		foreach (HexTile tile in board.Tiles()) {
 			if (tile.name != "Step1" && tile.name != "Step2" && tile.name != "Step3" && tile.name != "Step4" && tile.name != "Step5" && tile.name != "Step6" && tile.name != "Step7") {				
 				tile.Deactivate (() => {});
 			}
@@ -243,7 +241,7 @@ public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyList
 
 	private void Step7Complete() {
 		tutorialState = 8;
-		foreach (HexTile tile in GlobalContext.INSTANCE.getBoard ().Tiles()) {
+		foreach (HexTile tile in board.Tiles()) {
 			tile.Activate (() => {});
 		}
 		step7Highlight.gameObject.SetActive(false);
@@ -256,7 +254,7 @@ public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyList
 	}
 
 	private void Step8() {
-		foreach (HexTile tile in GlobalContext.INSTANCE.getBoard ().Tiles()) {
+		foreach (HexTile tile in board.Tiles()) {
 			if (tile.name == "Step8") {
 				tile.Activate (() => player2.StartTurn ());
 			}
@@ -267,7 +265,7 @@ public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyList
 	}
 
 	private void Step8Complete() {
-		foreach (HexTile tile in GlobalContext.INSTANCE.getBoard ().Tiles()) {
+		foreach (HexTile tile in board.Tiles()) {
 			tile.Activate (() => {});
 		}
 		tutorialState = 9;
@@ -276,7 +274,7 @@ public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyList
 
 	private void Step9() {
 		gamePanel.Reveal ("Click to sacrifice the tile!", () => Step9WaitForInput(), 0f, 0.15f, true);
-		foreach (HexTile tile in GlobalContext.INSTANCE.getBoard ().Tiles()) {
+		foreach (HexTile tile in board.Tiles()) {
 			if (tile.name != "Step1" && tile.name != "Step2" && tile.name != "Step3" && tile.name != "Step4" && tile.name != "Step5" && tile.name != "Step6" && tile.name != "Step7" && tile.name != "Step8") {				
 				tile.Deactivate (() => {});
 			}
@@ -290,7 +288,7 @@ public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyList
 
 	private void Step9Complete() {
 		tutorialState = 10;
-		foreach (HexTile tile in GlobalContext.INSTANCE.getBoard ().Tiles()) {
+		foreach (HexTile tile in board.Tiles()) {
 			tile.Activate (() => {});
 		}
 		step1Highlight.gameObject.SetActive(false);
@@ -344,17 +342,17 @@ public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyList
 
 	private bool CheckForEndOfGame()
 	{
-		return (player1.ClaimedTileCount() + player2.ClaimedTileCount() == tileCount);
+		return (player1.ClaimedTileCount() + player2.ClaimedTileCount() == board.Tiles().Count);
 	}
 
 	private void DisplayEndOfGame()
 	{
 		if (player1.ClaimedTileCount() > player2.ClaimedTileCount())
 		{
-			gamePanel.Reveal (player1.PlayerName () + " Wins!", () => {}, 0f, 0.15f, true);
+			gamePanel.Reveal (player1.PlayerName () + " WINS!", () => {}, 0f, 0.15f, true);
 		} else
 		{
-			gamePanel.Reveal (player2.PlayerName () + " Wins!", () => {}, 0f, 0.15f, true);
+			gamePanel.Reveal (player2.PlayerName () + " WINS!", () => {}, 0f, 0.15f, true);
 		}
 	}
 }

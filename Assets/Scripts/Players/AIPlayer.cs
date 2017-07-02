@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AIPlayer : Player, CoinFlipListener {
+public class AIPlayer : Player, CoinFlipListener, DifficultyChangeListener {
+
+	private const int DEFAULT_DIFFICULTY = 4;
 
 	[SerializeField]
 	private float baseWaitTime = 1f;
@@ -9,23 +11,23 @@ public class AIPlayer : Player, CoinFlipListener {
 	[SerializeField]
 	private float firstTurnExtraWaitTime = 1.5f;
 
-    [SerializeField]
+	[SerializeField]
+	private AIDifficultyMappings strategyMappings;
+
     private AIStrategy strategy;
 
 	private bool addInitialDelay = false;
 
-	public override void Initialise()
+	void Start()
 	{
-		base.Initialise ();
-		strategy.Initialise (this);
-		EventBus.INSTANCE.RegisterCoinFlipListener (this);
-	}
+		if (PlayerPrefs.HasKey ("difficulty")) {
+			SetStrategyForDifficulty (PlayerPrefs.GetInt ("difficulty"));
+		} else {
+			SetStrategyForDifficulty (DEFAULT_DIFFICULTY); 
+		}
 
-	public override void Reset()
-	{
-		base.Reset ();
-		this.addInitialDelay = false;
-		StopAllCoroutines ();
+		EventBus.INSTANCE.RegisterCoinFlipListener (this);
+		EventBus.INSTANCE.RegisterDifficultyChangeListener (this);
 	}
 
 	public void OnStartingPlayerChosen (Player player)
@@ -34,7 +36,16 @@ public class AIPlayer : Player, CoinFlipListener {
 			addInitialDelay = true;
 		}
 	}
+
+	public void OnDifficultyChanged(int difficulty) {
+		SetStrategyForDifficulty (difficulty);
+	}
 	
+	private void SetStrategyForDifficulty(int difficulty) 
+	{
+		strategy = strategyMappings.StrategyForDifficulty (difficulty);
+		strategy.Initialise (this);
+	}
 
     public override void StartTurn()
     {

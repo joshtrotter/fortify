@@ -1,10 +1,17 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/UI/ChallengeMenu.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/UI/GameMenu.cs">
     <Files>
-      <File FileName="Assets/Scripts/UI/GameMenu.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/UI/MainMenu.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/UI/ChallengeMenu.cs" Line="7" Column="32" />
+      <File FileName="Assets/Scripts/Events/EndTurnListener.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Events/EventBus.cs" Line="24" Column="3" />
+      <File FileName="Assets/Scripts/Events/SfxToggleListener.cs" Line="6" Column="2" />
+      <File FileName="Assets/Scripts/Events/DifficultyChangeListener.cs" Line="6" Column="2" />
+      <File FileName="Assets/Scripts/UI/SettingsMenu.cs" Line="45" Column="23" />
+      <File FileName="Assets/Scripts/Control/SoundController.cs" Line="36" Column="2" />
+      <File FileName="Assets/Scripts/Players/AIDifficultyMappings.cs" Line="23" Column="26" />
+      <File FileName="Assets/Scripts/Players/AIPlayer.cs" Line="14" Column="18" />
+      <File FileName="Assets/Scripts/UI/GameMenu.cs" Line="58" Column="16" />
+      <File FileName="Assets/Scripts/UI/HexButton.cs" Line="57" Column="12" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

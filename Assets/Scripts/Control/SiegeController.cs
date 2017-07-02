@@ -43,7 +43,7 @@ public class SiegeController : MonoBehaviour, EndTurnListener, BoardReadyListene
 		EventBus.INSTANCE.RegisterBoardReadyListener (this);
 	}
 
-	public void OnBoardReady()
+	public void OnBoardReady(HexBoard board)
 	{
 		foreach (HexTile tile in GlobalContext.INSTANCE.getBoard().Tiles()) {
 			if (tile.CompareTag ("claimed")) {

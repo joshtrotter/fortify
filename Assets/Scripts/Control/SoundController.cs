@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class SoundController : MonoBehaviour {
+public class SoundController : MonoBehaviour, SfxToggleListener {
+
+	public static SoundController INSTANCE;
 
 	[SerializeField]
 	private AudioClip claimClip;
@@ -25,33 +27,62 @@ public class SoundController : MonoBehaviour {
 
 	private AudioSource audioSource;
 
+	private bool sfxTurnedOn = true;
+
 	void Awake() {
-		audioSource = GetComponent<AudioSource> ();
+		if (INSTANCE == null) {
+			INSTANCE = this;
+			audioSource = GetComponent<AudioSource> ();
+			if (PlayerPrefs.HasKey ("sfx")) {
+				sfxTurnedOn = PlayerPrefs.GetInt ("sfx") == 1;
+			}
+		}
 	}
-	
+
+	void Start() {
+		EventBus.INSTANCE.RegisterSfxToggleListener (this);
+	}
+
+	public void OnSfxToggle (bool sfxOn)
+	{
+		sfxTurnedOn = sfxOn;
+	}
+		
 	public void PlayClaim() {
-		audioSource.PlayOneShot (claimClip);
+		if (sfxTurnedOn) {
+			audioSource.PlayOneShot (claimClip);
+		}
 	}
 
 	public void PlayCapture() {
-		audioSource.PlayOneShot (captureClip);
+		if (sfxTurnedOn) {
+			audioSource.PlayOneShot (captureClip);
+		}
 	}
 
 	public void PlayFortify() {
-		audioSource.PlayOneShot (fortifyClip);
+		if (sfxTurnedOn) {
+			audioSource.PlayOneShot (fortifyClip);
+		}
 	}
 
 	public void PlayDefortify() {
-		audioSource.PlayOneShot (defortifyClip);
+		if (sfxTurnedOn) {
+			audioSource.PlayOneShot (defortifyClip);
+		}
 	}
 
 	public void PlaySacrifice() {
-		audioSource.PlayOneShot (sacrificeClip);
+		if (sfxTurnedOn) {
+			audioSource.PlayOneShot (sacrificeClip);
+		}
 	}
 
-	public void PlayNotification(float delay = 0f) {
+	public void PlayNotification(float delay = 0f) {		
 		if (delay == 0f) {
-			audioSource.PlayOneShot (notificationClip);
+			if (sfxTurnedOn) {
+				audioSource.PlayOneShot (notificationClip);
+			}
 		} else {
 			StartCoroutine(playAfterDelay(() => PlayNotification(0f), delay));
 		}

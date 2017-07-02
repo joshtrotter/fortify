@@ -43,7 +43,7 @@ public class BreakoutController : MonoBehaviour, EndTurnListener, BoardReadyList
 		EventBus.INSTANCE.RegisterBoardReadyListener (this);
 	}
 
-	public void OnBoardReady()
+	public void OnBoardReady(HexBoard board)
 	{
 		source = GameObject.FindGameObjectWithTag ("source").GetComponent<HexTile>();
 		dest1 = GameObject.FindGameObjectWithTag ("dest1").GetComponent<HexTile>();

@@ -24,6 +24,8 @@ public class HexButton : MonoBehaviour {
 	private Vector2 downSize;
 	private Vector3 downPos;
 
+	private bool upState = true;
+
 	void Awake() {
 		image = GetComponent<Image> ();
 		rectTransform = GetComponent<RectTransform> ();
@@ -38,12 +40,22 @@ public class HexButton : MonoBehaviour {
 		rectTransform.sizeDelta = downSize;
 		rectTransform.localPosition = downPos;
 		image.sprite = downSprite;
+		upState = false;
 	}
 
 	public void onUp() {
 		rectTransform.sizeDelta = upSize;
 		rectTransform.localPosition = upPos;
 		image.sprite = upSprite;
+		upState = true;
+	}
+
+	public void ToggleState() {
+		if (upState) {
+			onDown ();
+		} else {
+			onUp ();
+		}
 	}
 
 }

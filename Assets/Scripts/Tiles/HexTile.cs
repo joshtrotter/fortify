@@ -27,26 +27,20 @@ public class HexTile : MonoBehaviour {
     void Awake()
     {
 		tileAnimator = gameObject.GetComponent<SpriteAnimator> ();
+		Debug.Log (tileAnimator);
     }
 
     void OnMouseDown()
     {
-		EventBus.INSTANCE.NotifyTileSelection (this);        
+		if (Time.timeScale != 0f) {
+			EventBus.INSTANCE.NotifyTileSelection (this);        
+		}
     }
 
 	public void Initialise()
 	{
-		GlobalContext.INSTANCE.getSoundController ().PlayClaim ();
+		SoundController.INSTANCE.PlayClaim ();
 		tileAnimator.AnimateExpand (Vector3.zero, Vector3.one, 0.2f, () => {});
-	}
-
-	public void Reset()
-	{
-		currentState = TileState.AVAILABLE;
-		tileAnimator.SetSprite (defaultSprite);
-		neighbours.Clear ();
-		owner = null;
-		transform.localScale = Vector3.zero;
 	}
 
 	public void SetToState(TileState state, Player owner, Sprite sprite, bool activated)
@@ -65,10 +59,10 @@ public class HexTile : MonoBehaviour {
     public void Claim(Player player, Action onComplete)
     {		
 		if (owner == player.Opponent()) {
-			GlobalContext.INSTANCE.getSoundController ().PlayCapture ();
+			SoundController.INSTANCE.PlayCapture ();
 			StartCoroutine(tileAnimator.FlipToSprite(player.PlayerSprite(), onComplete));
 		} else {
-			GlobalContext.INSTANCE.getSoundController ().PlayClaim ();
+			SoundController.INSTANCE.PlayClaim ();
 			StartCoroutine(tileAnimator.ExpandToSprite(player.PlayerSprite(), onComplete));
 		}
 
@@ -84,7 +78,7 @@ public class HexTile : MonoBehaviour {
 	public void ApplyFortify(Action onComplete)
     {
         currentState = TileState.FORTIFIED;
-		GlobalContext.INSTANCE.getSoundController ().PlayFortify ();
+		SoundController.INSTANCE.PlayFortify ();
 		StartCoroutine(tileAnimator.ExpandToSprite(owner.FortifySprite(), onComplete));
     }
 
@@ -95,7 +89,7 @@ public class HexTile : MonoBehaviour {
 	public void RemoveFortify(Action onComplete)
     {
         currentState = TileState.CLAIMED;
-		GlobalContext.INSTANCE.getSoundController ().PlayDefortify ();
+		SoundController.INSTANCE.PlayDefortify ();
 		StartCoroutine(tileAnimator.ExpandToSprite(owner.PlayerSprite(), onComplete));
     }
 
@@ -106,7 +100,7 @@ public class HexTile : MonoBehaviour {
 	public void Sacrifice(Action onComplete)
 	{
 		currentState = TileState.CLAIMED;
-		GlobalContext.INSTANCE.getSoundController ().PlaySacrifice ();
+		SoundController.INSTANCE.PlaySacrifice ();
 		StartCoroutine(tileAnimator.SacrificeAnimation(owner.PlayerSprite(), onComplete, 0.33f, 0.2f));
 	}
 

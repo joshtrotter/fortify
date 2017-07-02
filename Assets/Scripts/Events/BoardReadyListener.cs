@@ -2,6 +2,6 @@
 
 public interface BoardReadyListener {
 
-	void OnBoardReady();
+	void OnBoardReady(HexBoard board);
 
 }

@@ -9,11 +9,9 @@ public class EventBus : MonoBehaviour
 	private HashSet<EndTurnListener> endTurnListeners = new HashSet<EndTurnListener> ();
 	private HashSet<TileSelectionListener> tileSelectionListeners = new HashSet<TileSelectionListener> ();
 	private HashSet<CoinFlipListener> coinFlipListeners = new HashSet<CoinFlipListener> ();
-	private HashSet<StartAnimationListener> startAnimationListeners = new HashSet<StartAnimationListener> ();
-	private HashSet<EndAnimationListener> endAnimationListeners = new HashSet<EndAnimationListener> ();
 	private HashSet<BoardReadyListener> boardReadyListeners = new HashSet<BoardReadyListener> ();
-
-	private int runningAnimationCount = 0;
+	private HashSet<SfxToggleListener> sfxToggleListeners = new HashSet<SfxToggleListener> ();
+	private HashSet<DifficultyChangeListener> difficultyChangeListeners = new HashSet<DifficultyChangeListener> ();
 
 	void Awake () {
 		if (INSTANCE == null) {
@@ -72,42 +70,6 @@ public class EventBus : MonoBehaviour
 		}
 	}
 
-	public void RegisterStartAnimationListener(StartAnimationListener listener) 
-	{
-		startAnimationListeners.Add (listener);
-	}
-
-	public void DeregisterStartAnimationListener(StartAnimationListener listener)
-	{
-		startAnimationListeners.Remove (listener);
-	}
-
-	public void NotifyStartAnimation()
-	{
-		runningAnimationCount++;
-		foreach (StartAnimationListener listener in startAnimationListeners) {
-			listener.OnAnimationStart ();
-		}
-	}
-
-	public void RegisterEndAnimationListener(EndAnimationListener listener) 
-	{
-		endAnimationListeners.Add (listener);
-	}
-
-	public void DeregisterEndAnimationListener(EndAnimationListener listener)
-	{
-		endAnimationListeners.Remove (listener);
-	}
-
-	public void NotifyEndAnimation()
-	{
-		runningAnimationCount--;
-		foreach (EndAnimationListener listener in endAnimationListeners) {
-			listener.OnAnimationEnd (runningAnimationCount);
-		}
-	}
-
 	public void RegisterBoardReadyListener(BoardReadyListener listener) 
 	{
 		boardReadyListeners.Add (listener);
@@ -118,10 +80,44 @@ public class EventBus : MonoBehaviour
 		boardReadyListeners.Remove (listener);
 	}
 
-	public void NotifyBoardReady()
+	public void NotifyBoardReady(HexBoard board)
 	{
 		foreach (BoardReadyListener listener in boardReadyListeners) {
-			listener.OnBoardReady ();
+			listener.OnBoardReady (board);
+		}
+	}
+
+	public void RegisterSfxToggleListener(SfxToggleListener listener) 
+	{
+		sfxToggleListeners.Add (listener);
+	}
+
+	public void DeregisterSfxToggleListener(SfxToggleListener listener)
+	{
+		sfxToggleListeners.Remove (listener);
+	}
+
+	public void NotifySfxToggle(bool sfxOn)
+	{
+		foreach (SfxToggleListener listener in sfxToggleListeners) {
+			listener.OnSfxToggle (sfxOn);
+		}
+	}
+
+	public void RegisterDifficultyChangeListener(DifficultyChangeListener listener) 
+	{
+		difficultyChangeListeners.Add (listener);
+	}
+
+	public void DeregisterDifficultyChangeListener(DifficultyChangeListener listener)
+	{
+		difficultyChangeListeners.Remove (listener);
+	}
+
+	public void NotifyDifficultyChange(int difficulty)
+	{
+		foreach (DifficultyChangeListener listener in difficultyChangeListeners) {
+			listener.OnDifficultyChanged (difficulty);
 		}
 	}
 

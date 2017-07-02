@@ -32,16 +32,7 @@ public class HexBoard : MonoBehaviour {
 			yield return new WaitForSeconds (0.025f);
 		}
 		yield return new WaitForSeconds (0.15f);
-		EventBus.INSTANCE.NotifyBoardReady ();
-	}
-
-	public void Reset()
-	{
-		foreach (HexTile tile in tiles) {
-			tile.Reset ();
-		}
-		tiles.Clear ();
-		gameObject.SetActive (false);
+		EventBus.INSTANCE.NotifyBoardReady (this);
 	}
 
     public List<HexTile> Tiles()

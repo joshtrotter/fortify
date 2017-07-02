@@ -3,7 +3,10 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour, EndTurnListener, CoinFlipListener, BoardReadyListener {
 
+	[SerializeField]
     private Player player1;
+
+	[SerializeField]
     private Player player2;
 
 	[SerializeField]
@@ -21,25 +24,21 @@ public class GameController : MonoBehaviour, EndTurnListener, CoinFlipListener, 
     private int tileCount;
 
 	void Start () {
+		EventBus.INSTANCE.RegisterEndTurnListener (this);
+		EventBus.INSTANCE.RegisterCoinFlipListener (this);
+		EventBus.INSTANCE.RegisterBoardReadyListener (this);
+
 		Initialise ();
 	}
 	    
 	public void Initialise() {
-		GlobalContext.INSTANCE.Initialise ();
-		player1 = GlobalContext.INSTANCE.getPlayer1 ();
-		player2 = GlobalContext.INSTANCE.getPlayer2 ();
-		tileCount = GlobalContext.INSTANCE.getBoard ().Tiles().Count;        
-
 		player1UI.InitialiseForPlayer (player1);
 		player2UI.InitialiseForPlayer (player2);
-
-		EventBus.INSTANCE.RegisterEndTurnListener (this);
-		EventBus.INSTANCE.RegisterCoinFlipListener (this);
-		EventBus.INSTANCE.RegisterBoardReadyListener (this);
 	}
 		
-	public void OnBoardReady()
+	public void OnBoardReady(HexBoard board)
 	{
+		tileCount = board.Tiles ().Count;
 		coin.Toss (player1, player2);
 	}
 
@@ -70,10 +69,10 @@ public class GameController : MonoBehaviour, EndTurnListener, CoinFlipListener, 
     {
         if (player1.ClaimedTileCount() > player2.ClaimedTileCount())
         {
-			notificationPanel.Reveal (player1.PlayerName () + " Wins!", () => {}, 0f, 0.15f, true);
+			notificationPanel.Reveal (player1.PlayerName () + " WINS!", () => {}, 0f, 0.15f, true);
         } else
         {
-			notificationPanel.Reveal (player2.PlayerName () + " Wins!", () => {}, 0f, 0.15f, true);
+			notificationPanel.Reveal (player2.PlayerName () + " WINS!", () => {}, 0f, 0.15f, true);
         }
     }
 	

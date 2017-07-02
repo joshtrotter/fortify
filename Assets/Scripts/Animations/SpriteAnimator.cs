@@ -13,11 +13,11 @@ public class SpriteAnimator : MonoBehaviour {
 	}
 
 	public void SetSprite(Sprite sprite) {
+		Debug.Log (spriteContainer);
 		spriteContainer.SetSprite(sprite);
 	}
 
-	public IEnumerator SacrificeAnimation(Sprite sprite, Action onComplete, float initialScale = 0.33f, float duration = 0.20f, float expansionSize = 1.66f) {
-		EventBus.INSTANCE.NotifyStartAnimation ();
+	public IEnumerator SacrificeAnimation(Sprite sprite, Action onComplete, float initialScale = 0.33f, float duration = 0.20f, float expansionSize = 1.66f) {		
 		SpriteAnimator placeholder = Instantiate (this, transform.parent);
 		spriteContainer.SetSortingLayer("Overlay");
 		SetSprite(sprite);
@@ -34,17 +34,14 @@ public class SpriteAnimator : MonoBehaviour {
 
 		if (onComplete != null) {			
 			onComplete ();
-		}
-
-		EventBus.INSTANCE.NotifyEndAnimation ();
+		}			
 	}
 
 	public void AnimateExpandToSprite(Sprite sprite, Action onComplete, float initialScale = 0.33f, float duration = 0.20f) {
 		StartCoroutine (ExpandToSprite(sprite, onComplete, initialScale, duration));
 	}
 	
-	public IEnumerator ExpandToSprite(Sprite sprite, Action onComplete, float initialScale = 0.33f, float duration = 0.20f) {
-		EventBus.INSTANCE.NotifyStartAnimation ();
+	public IEnumerator ExpandToSprite(Sprite sprite, Action onComplete, float initialScale = 0.33f, float duration = 0.20f) {		
 		SpriteAnimator placeholder = Instantiate (this, transform.parent);
 		spriteContainer.SetSortingLayer("Overlay");
 		SetSprite(sprite);
@@ -60,13 +57,9 @@ public class SpriteAnimator : MonoBehaviour {
 		if (onComplete != null) {			
 			onComplete ();
 		}
-
-
-		EventBus.INSTANCE.NotifyEndAnimation ();
 	}
 
-	public IEnumerator FlipToSprite(Sprite sprite, Action onComplete, float endSize = 1f, float duration = 0.20f) {	
-		EventBus.INSTANCE.NotifyStartAnimation ();	
+	public IEnumerator FlipToSprite(Sprite sprite, Action onComplete, float endSize = 1f, float duration = 0.20f) {			
 		yield return Flip (transform.localScale.x, 0f, duration / 2f);
 		SetSprite(sprite);
 		yield return Flip (0f, endSize, duration / 2f);
@@ -74,7 +67,6 @@ public class SpriteAnimator : MonoBehaviour {
 		if (onComplete != null) {			
 			onComplete ();
 		}
-		EventBus.INSTANCE.NotifyEndAnimation ();
 	}
 
 	public void AnimateExpand(Vector3 startSize, Vector3 endSize, float duration, Action onComplete) {

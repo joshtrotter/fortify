@@ -121,7 +121,7 @@ public class TutorialPanel : MonoBehaviour {
 
 	private void Step3Instructions1()
 	{
-		ShowBody ("\n\n\nThe opponent captured your tile! Whenever a player claims a tile they also capture all ordinary adjacent tiles of the other player", () => Step3ButtonOk(), 1f, 1f, true);
+		ShowBody ("\n\n\nThe opponent captured your tile! Whenever a player claims a tile they also capture adjacent tiles of the other player", () => Step3ButtonOk(), 1f, 1f, true);
 	}
 
 	private void Step3ButtonOk()
@@ -166,7 +166,7 @@ public class TutorialPanel : MonoBehaviour {
 
 	private void Step9Instructions2()
 	{
-		ShowBody ("\n\n\nSacrificing removes your tiles fortification in exchange for capturing all ordinary adjacent tiles of your opponent", () => Step9ButtonOk(), 1f, 1.5f, true);
+		ShowBody ("\n\n\nSacrificing removes your tiles fortification in exchange for capturing adjacent tiles of your opponent", () => Step9ButtonOk(), 1f, 1.5f, true);
 	}
 
 	private void Step9ButtonOk()

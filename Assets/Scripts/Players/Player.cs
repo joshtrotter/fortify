@@ -3,18 +3,24 @@
 public abstract class Player : MonoBehaviour {
 
 	[SerializeField]
+	private PlayerConfigSelector configSelector;
+
 	private PlayerConfig playerConfig;
+
+	[SerializeField]
+	private Player opponent;
+
+	[SerializeField]
+	private ActionRuleSet actionRuleSet;
+
+	[SerializeField]
+	private string playerName;
    
     private int claimedTileCount = 0;
 
-	public virtual void Initialise()
-	{
-
-	}
-
-	public virtual void Reset()
-	{
-		this.claimedTileCount = 0;
+	void Awake() {
+		playerConfig = configSelector.GetSelectedConfig ();
+		playerConfig.SetPlayerName (playerName);
 	}
 
 	public Sprite PlayerSprite()
@@ -43,7 +49,7 @@ public abstract class Player : MonoBehaviour {
 
     protected void PlayTile(HexTile tile)
     {		
-		GlobalContext.INSTANCE.getActionRuleSet().PlayTile(this, tile, () => EndTurn());
+		actionRuleSet.PlayTile(this, tile, () => EndTurn());
     }
 
     public virtual void EndTurn()
@@ -53,7 +59,7 @@ public abstract class Player : MonoBehaviour {
 
     public Player Opponent()
     {
-		return GlobalContext.INSTANCE.getOpponentOf(this);
+		return opponent;
     }
 
     public int ClaimedTileCount()
