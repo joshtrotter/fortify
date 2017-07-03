@@ -4,7 +4,10 @@ using UnityEngine.UI;
 
 public class BreakoutController : MonoBehaviour, EndTurnListener, BoardReadyListener {
 
+	[SerializeField]
 	private Player player1;
+
+	[SerializeField]
 	private Player player2;
 
 	[SerializeField]
@@ -27,24 +30,20 @@ public class BreakoutController : MonoBehaviour, EndTurnListener, BoardReadyList
 
 
 	void Start () {
+		EventBus.INSTANCE.RegisterEndTurnListener (this);
+		EventBus.INSTANCE.RegisterBoardReadyListener (this);
+
 		Initialise ();
 	}
 
-	public void Initialise() {		
-		GlobalContext.INSTANCE.Initialise ();
-		player1 = GlobalContext.INSTANCE.getPlayer1 ();
-		player2 = GlobalContext.INSTANCE.getPlayer2 (); 
-		tileCount = GlobalContext.INSTANCE.getBoard ().Tiles().Count;
-
+	public void Initialise() {						
 		player1UI.InitialiseForPlayer (player1);
 		player2UI.InitialiseForPlayer (player2);
-
-		EventBus.INSTANCE.RegisterEndTurnListener (this);
-		EventBus.INSTANCE.RegisterBoardReadyListener (this);
 	}
 
 	public void OnBoardReady(HexBoard board)
 	{
+		tileCount = board.Tiles ().Count;
 		source = GameObject.FindGameObjectWithTag ("source").GetComponent<HexTile>();
 		dest1 = GameObject.FindGameObjectWithTag ("dest1").GetComponent<HexTile>();
 		dest2 = GameObject.FindGameObjectWithTag ("dest2").GetComponent<HexTile>();
@@ -90,10 +89,10 @@ public class BreakoutController : MonoBehaviour, EndTurnListener, BoardReadyList
 					tile.Deactivate(() => {});
 				}
 			}
-			notificationPanel.Reveal (player1.PlayerName () + " Wins!", () => {}, 0.25f, 0.15f, true);
+			notificationPanel.Reveal (player1.PlayerName () + " WINS!", () => {}, 0.25f, 0.15f, true);
 		} else
 		{
-			notificationPanel.Reveal (player2.PlayerName () + " Wins!", () => {}, 0f, 0.15f, true);
+			notificationPanel.Reveal (player2.PlayerName () + " WINS!", () => {}, 0f, 0.15f, true);
 		}
 	}
 
