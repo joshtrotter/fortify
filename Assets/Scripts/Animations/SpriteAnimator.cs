@@ -12,8 +12,7 @@ public class SpriteAnimator : MonoBehaviour {
 		spriteContainer = gameObject.GetComponent<SpriteContainer>();	
 	}
 
-	public void SetSprite(Sprite sprite) {
-		Debug.Log (spriteContainer);
+	public void SetSprite(Sprite sprite) {		
 		spriteContainer.SetSprite(sprite);
 	}
 

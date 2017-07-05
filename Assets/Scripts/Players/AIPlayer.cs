@@ -44,6 +44,7 @@ public class AIPlayer : Player, CoinFlipListener, DifficultyChangeListener {
 	private void SetStrategyForDifficulty(int difficulty) 
 	{
 		strategy = strategyMappings.StrategyForDifficulty (difficulty);
+		Debug.Log (PlayerName () + " difficulty = " + strategy);
 		strategy.Initialise (this);
 	}
 

@@ -4,7 +4,10 @@ using UnityEngine.UI;
 
 public class SiegeController : MonoBehaviour, EndTurnListener, BoardReadyListener {
 
+	[SerializeField]
 	private Player player1;
+
+	[SerializeField]
 	private Player player2;
 
 	[SerializeField]
@@ -26,26 +29,22 @@ public class SiegeController : MonoBehaviour, EndTurnListener, BoardReadyListene
 	private Text turnsRemainingLabel;
 
 	void Start () {
-		Initialise ();
-	}
-
-	public void Initialise() {
-		GlobalContext.INSTANCE.Initialise ();
-		player1 = GlobalContext.INSTANCE.getPlayer1 ();
-		player2 = GlobalContext.INSTANCE.getPlayer2 ();      
-
-		player1UI.InitialiseForPlayer (player1);
-		player2UI.InitialiseForPlayer (player2);
 		EventBus.INSTANCE.DeregisterEndTurnListener (player1UI);
 		EventBus.INSTANCE.DeregisterEndTurnListener (player2UI);
 
 		EventBus.INSTANCE.RegisterEndTurnListener (this);
 		EventBus.INSTANCE.RegisterBoardReadyListener (this);
+		Initialise ();
+	}
+
+	public void Initialise() {		
+		player1UI.InitialiseForPlayer (player1);
+		player2UI.InitialiseForPlayer (player2);
 	}
 
 	public void OnBoardReady(HexBoard board)
 	{
-		foreach (HexTile tile in GlobalContext.INSTANCE.getBoard().Tiles()) {
+		foreach (HexTile tile in board.Tiles()) {
 			if (tile.CompareTag ("claimed")) {
 				tile.SetToState (HexTile.TileState.CLAIMED, player2, player2.PlayerSprite (), true);
 				player2.AddClaimedTile ();
@@ -89,10 +88,10 @@ public class SiegeController : MonoBehaviour, EndTurnListener, BoardReadyListene
 	{
 		if (player2.ClaimedTileCount() == 0)
 		{
-			notificationPanel.Reveal ("Challenge Completed!", () => {}, 0f, 0.15f, true);
+			notificationPanel.Reveal ("CHALLENGE COMPLETED!", () => {}, 0f, 0.15f, true);
 		} else
 		{
-			notificationPanel.Reveal ("Challenge Failed!", () => {}, 0f, 0.15f, true);
+			notificationPanel.Reveal ("TRY AGAIN!", () => {}, 0f, 0.15f, true);
 		}
 	}
 

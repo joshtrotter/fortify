@@ -65,11 +65,11 @@ public class AIStrategy : MonoBehaviour, BoardReadyListener {
 			}
 		}
 
-		Debug.Log ("Mistake: " + mistakeScore);
-		Debug.DrawLine (mistakeTile.transform.position, mistakeTile.transform.position + new Vector3 (0f, 1f, 0f), Color.red, 5f);
-
-		Debug.Log ("Top: " + topScore);
-		Debug.DrawLine (topTile.transform.position, topTile.transform.position + new Vector3 (0f, 1f, 0f), Color.green, 5f);
+//		Debug.Log ("Mistake: " + mistakeScore);
+//		Debug.DrawLine (mistakeTile.transform.position, mistakeTile.transform.position + new Vector3 (0f, 1f, 0f), Color.red, 5f);
+//
+//		Debug.Log ("Top: " + topScore);
+//		Debug.DrawLine (topTile.transform.position, topTile.transform.position + new Vector3 (0f, 1f, 0f), Color.green, 5f);
 
 		if (topScore - mistakeScore <= mistakeThreshold && Random.Range (0f, 1f) <= mistakeChance) {
 			player.OnTileSelected (mistakeTile);

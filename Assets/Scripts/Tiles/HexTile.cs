@@ -27,7 +27,6 @@ public class HexTile : MonoBehaviour {
     void Awake()
     {
 		tileAnimator = gameObject.GetComponent<SpriteAnimator> ();
-		Debug.Log (tileAnimator);
     }
 
     void OnMouseDown()

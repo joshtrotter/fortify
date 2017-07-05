@@ -22,8 +22,7 @@ public class BreakoutController : MonoBehaviour, EndTurnListener, BoardReadyList
 	[SerializeField]
 	private NotificationPanel notificationPanel;
 
-	private int tileCount;
-
+	private HexBoard board;
 	private HexTile source;
 	private HexTile dest1;
 	private HexTile dest2;
@@ -43,7 +42,7 @@ public class BreakoutController : MonoBehaviour, EndTurnListener, BoardReadyList
 
 	public void OnBoardReady(HexBoard board)
 	{
-		tileCount = board.Tiles ().Count;
+		this.board = board;
 		source = GameObject.FindGameObjectWithTag ("source").GetComponent<HexTile>();
 		dest1 = GameObject.FindGameObjectWithTag ("dest1").GetComponent<HexTile>();
 		dest2 = GameObject.FindGameObjectWithTag ("dest2").GetComponent<HexTile>();
@@ -72,7 +71,7 @@ public class BreakoutController : MonoBehaviour, EndTurnListener, BoardReadyList
 
 	private bool CheckForEndOfGame()
 	{
-		return (player1.ClaimedTileCount() + player2.ClaimedTileCount() == tileCount);
+		return (player1.ClaimedTileCount() + player2.ClaimedTileCount() == board.Tiles ().Count);
 	}
 
 	private void DisplayEndOfGame()
@@ -82,17 +81,17 @@ public class BreakoutController : MonoBehaviour, EndTurnListener, BoardReadyList
 
 		if (path1 != null || path2 != null)
 		{
-			foreach (HexTile tile in GlobalContext.INSTANCE.getBoard().Tiles()) {
+			foreach (HexTile tile in board.Tiles()) {
 				if ((path1 != null && path1.Contains(tile)) || (path2 != null && path2.Contains(tile))) {
 					tile.Activate(() => {});
 				} else {
 					tile.Deactivate(() => {});
 				}
 			}
-			notificationPanel.Reveal (player1.PlayerName () + " WINS!", () => {}, 0.25f, 0.15f, true);
+			notificationPanel.Reveal ("CHALLENGE COMPLETED!", () => {}, 0.25f, 0.15f, true);
 		} else
 		{
-			notificationPanel.Reveal (player2.PlayerName () + " WINS!", () => {}, 0f, 0.15f, true);
+			notificationPanel.Reveal ("TRY AGAIN!", () => {}, 0f, 0.15f, true);
 		}
 	}
 
