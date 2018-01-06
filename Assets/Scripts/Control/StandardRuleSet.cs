@@ -32,11 +32,13 @@ public class StandardRuleSet : ActionRuleSet
 	private void Sacrifice (Player player, HexTile tile, Action onComplete)
 	{
 		tile.Sacrifice (() => {
+			player.ToggleSacrificing(true);
 			foreach (HexTile neighbour in tile.Neighbours()) {
 				if (neighbour.CurrentOwner () == player.Opponent ()) {
 					InfluenceOpponentTile (player, neighbour);
 				}
 			}
+			player.ToggleSacrificing(false);
 			if (onComplete != null) {
 				onComplete ();
 			}

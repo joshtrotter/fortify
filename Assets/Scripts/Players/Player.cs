@@ -18,6 +18,9 @@ public abstract class Player : MonoBehaviour {
    
     private int claimedTileCount = 0;
 
+	private bool isSacrificing = false;
+	private int sacrificeScore = 0;
+
 	void Awake() {
 		playerConfig = configSelector.GetSelectedConfig ();
 		playerConfig.SetPlayerName (playerName);
@@ -67,14 +70,26 @@ public abstract class Player : MonoBehaviour {
         return claimedTileCount;
     }
 
+	public int SacrificeScore()
+	{
+		return sacrificeScore;
+	}
+
     public void AddClaimedTile()
-    {
+    {		
         ++claimedTileCount;
+		if (isSacrificing) {
+			++sacrificeScore;
+		}
     }
 
     public void RemoveClaimedTile()
     {
         --claimedTileCount;
     }
+
+	public void ToggleSacrificing(bool isSacrificing) {
+		this.isSacrificing = isSacrificing;
+	}
 
 }
