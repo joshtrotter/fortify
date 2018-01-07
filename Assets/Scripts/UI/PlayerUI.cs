@@ -61,6 +61,6 @@ public class PlayerUI : MonoBehaviour, EndTurnListener, CoinFlipListener {
 
     public void UpdateScore()
     {
-		this.score.text = "" + player.ClaimedTileCount();
+		this.score.text = "" + player.ClaimedTileScore();
     }
 }

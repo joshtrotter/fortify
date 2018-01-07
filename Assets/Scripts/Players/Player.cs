@@ -16,7 +16,7 @@ public abstract class Player : MonoBehaviour {
 	[SerializeField]
 	private string playerName;
    
-    private int claimedTileCount = 0;
+    private int tileScore = 0;
 
 	private bool isSacrificing = false;
 	private int sacrificeScore = 0;
@@ -65,9 +65,9 @@ public abstract class Player : MonoBehaviour {
 		return opponent;
     }
 
-    public int ClaimedTileCount()
+    public int ClaimedTileScore()
     {
-        return claimedTileCount;
+		return tileScore;
     }
 
 	public int SacrificeScore()
@@ -75,17 +75,17 @@ public abstract class Player : MonoBehaviour {
 		return sacrificeScore;
 	}
 
-    public void AddClaimedTile()
+    public void AddClaimedTile(HexTile tile)
     {		
-        ++claimedTileCount;
+		tileScore += tile.TileScore();
 		if (isSacrificing) {
-			++sacrificeScore;
+			sacrificeScore += tile.TileScore();
 		}
     }
 
-    public void RemoveClaimedTile()
+	public void RemoveClaimedTile(HexTile tile)
     {
-        --claimedTileCount;
+		tileScore -= tile.TileScore();
     }
 
 	public void ToggleSacrificing(bool isSacrificing) {

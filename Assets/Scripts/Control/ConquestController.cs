@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SacrificeController : MonoBehaviour, CoinFlipListener, EndTurnListener, BoardReadyListener {
+public class ConquestController : MonoBehaviour, CoinFlipListener, EndTurnListener, BoardReadyListener {
 
 	[SerializeField]
 	private Player player1;
@@ -11,10 +11,10 @@ public class SacrificeController : MonoBehaviour, CoinFlipListener, EndTurnListe
 	private Player player2;
 
 	[SerializeField]
-	private SacrificePlayerUI player1UI;
+	private PlayerUI player1UI;
 
 	[SerializeField]
-	private SacrificePlayerUI player2UI;
+	private PlayerUI player2UI;
 
 	[SerializeField]
 	private ChallengePanel challengePanel;
@@ -25,7 +25,7 @@ public class SacrificeController : MonoBehaviour, CoinFlipListener, EndTurnListe
 	[SerializeField]
 	private Coin coin;
 
-	private int tileCount;
+	private int totalTileScore = 0;
 
 	void Start () {
 		EventBus.INSTANCE.RegisterEndTurnListener (this);
@@ -42,7 +42,9 @@ public class SacrificeController : MonoBehaviour, CoinFlipListener, EndTurnListe
 
 	public void OnBoardReady(HexBoard board)
 	{
-		tileCount = board.Tiles ().Count;
+		foreach (HexTile tile in board.Tiles()) {
+			totalTileScore += tile.TileScore ();
+		}
 		challengePanel.Initialise (0.5f);
 	}
 
@@ -71,12 +73,12 @@ public class SacrificeController : MonoBehaviour, CoinFlipListener, EndTurnListe
 
 	private bool CheckForEndOfGame()
 	{
-		return (player1.ClaimedTileScore() + player2.ClaimedTileScore() == tileCount);
+		return (player1.ClaimedTileScore() + player2.ClaimedTileScore() == totalTileScore);
 	}
 
 	private void DisplayEndOfGame()
 	{
-		if (player1.SacrificeScore() > player2.SacrificeScore())
+		if (player1.ClaimedTileScore() > player2.ClaimedTileScore())
 		{
 			notificationPanel.Reveal ("CHALLENGE COMPLETED!", () => {}, 0f, 0.15f, true);
 		} else

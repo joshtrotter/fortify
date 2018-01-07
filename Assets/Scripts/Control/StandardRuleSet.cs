@@ -15,7 +15,7 @@ public class StandardRuleSet : ActionRuleSet
 	private void Claim (Player player, HexTile tile, Action onComplete)
 	{
 		tile.Claim (player, () => {
-			player.AddClaimedTile ();
+			player.AddClaimedTile(tile);
 			foreach (HexTile neighbour in tile.Neighbours()) {
 				if (neighbour.CurrentOwner () == player) {
 					InfluenceAllyTile (player, neighbour);
@@ -56,8 +56,8 @@ public class StandardRuleSet : ActionRuleSet
 	{
 		if (opponent.Claimed ()) {
 			opponent.Claim (player);
-			player.AddClaimedTile ();
-			player.Opponent ().RemoveClaimedTile ();
+			player.AddClaimedTile(opponent);
+			player.Opponent ().RemoveClaimedTile (opponent);
 		} else if (opponent.Fortified ()) {
 			opponent.RemoveFortify ();
 		}

@@ -342,12 +342,12 @@ public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyList
 
 	private bool CheckForEndOfGame()
 	{
-		return (player1.ClaimedTileCount() + player2.ClaimedTileCount() == board.Tiles().Count);
+		return (player1.ClaimedTileScore() + player2.ClaimedTileScore() == board.Tiles().Count);
 	}
 
 	private void DisplayEndOfGame()
 	{
-		if (player1.ClaimedTileCount() > player2.ClaimedTileCount())
+		if (player1.ClaimedTileScore() > player2.ClaimedTileScore())
 		{
 			gamePanel.Reveal (player1.PlayerName () + " WINS!", () => {}, 0f, 0.15f, true);
 		} else

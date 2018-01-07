@@ -18,6 +18,9 @@ public class HexTile : MonoBehaviour {
 	[SerializeField]
 	private float randomValueVariance = 0f;
 
+	[SerializeField]
+	private int tileScore = 1;
+
     private Player owner;
 	private SpriteAnimator tileAnimator;
 	private TileState currentState = TileState.AVAILABLE;
@@ -153,6 +156,11 @@ public class HexTile : MonoBehaviour {
 	public float TileValue()
 	{
 		return baseValue + UnityEngine.Random.Range (0f, randomValueVariance);
+	}
+
+	public int TileScore()
+	{
+		return tileScore;
 	}
 
 }

@@ -47,10 +47,10 @@ public class SiegeController : MonoBehaviour, EndTurnListener, BoardReadyListene
 		foreach (HexTile tile in board.Tiles()) {
 			if (tile.CompareTag ("claimed")) {
 				tile.SetToState (HexTile.TileState.CLAIMED, player2, player2.PlayerSprite (), true);
-				player2.AddClaimedTile ();
+				player2.AddClaimedTile(tile);
 			} else if (tile.CompareTag ("fortified")) {
 				tile.SetToState (HexTile.TileState.FORTIFIED, player2, player2.FortifySprite (), true);
-				player2.AddClaimedTile ();
+				player2.AddClaimedTile(tile);
 			}
 		}
 		player1UI.FadeIn ();
@@ -86,7 +86,7 @@ public class SiegeController : MonoBehaviour, EndTurnListener, BoardReadyListene
 
 	private void DisplayEndOfGame()
 	{
-		if (player2.ClaimedTileCount() == 0)
+		if (player2.ClaimedTileScore() == 0)
 		{
 			notificationPanel.Reveal ("CHALLENGE COMPLETED!", () => {}, 0f, 0.15f, true);
 		} else

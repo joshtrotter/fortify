@@ -47,7 +47,7 @@ public class BreakoutController : MonoBehaviour, EndTurnListener, BoardReadyList
 		dest1 = GameObject.FindGameObjectWithTag ("dest1").GetComponent<HexTile>();
 		dest2 = GameObject.FindGameObjectWithTag ("dest2").GetComponent<HexTile>();
 		source.SetToState (HexTile.TileState.FORTIFIED, player1, player1.FortifySprite (), true);
-		player1.AddClaimedTile ();
+		player1.AddClaimedTile(source);
 		challengePanel.Initialise (0.5f);
 	}
 
@@ -71,7 +71,7 @@ public class BreakoutController : MonoBehaviour, EndTurnListener, BoardReadyList
 
 	private bool CheckForEndOfGame()
 	{
-		return (player1.ClaimedTileCount() + player2.ClaimedTileCount() == board.Tiles ().Count);
+		return (player1.ClaimedTileScore() + player2.ClaimedTileScore() == board.Tiles ().Count);
 	}
 
 	private void DisplayEndOfGame()

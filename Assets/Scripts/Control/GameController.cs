@@ -62,12 +62,12 @@ public class GameController : MonoBehaviour, EndTurnListener, CoinFlipListener, 
 
     private bool CheckForEndOfGame()
     {
-        return (player1.ClaimedTileCount() + player2.ClaimedTileCount() == tileCount);
+        return (player1.ClaimedTileScore() + player2.ClaimedTileScore() == tileCount);
     }
 
     private void DisplayEndOfGame()
     {
-        if (player1.ClaimedTileCount() > player2.ClaimedTileCount())
+        if (player1.ClaimedTileScore() > player2.ClaimedTileScore())
         {
 			notificationPanel.Reveal (player1.PlayerName () + " WINS!", () => {}, 0f, 0.15f, true);
         } else
