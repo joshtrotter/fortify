@@ -1,22 +1,20 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Players/AIPlayer.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Control/CaptureController.cs">
     <Files>
-      <File FileName="Assets/Scripts/Animations/SpriteAnimator.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Tiles/HexTile.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Control/TutorialController.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Control/GameController.cs" Line="65" Column="87" />
+      <File FileName="Assets/Scripts/Players/Player.cs" Line="68" Column="32" />
+      <File FileName="Assets/Scripts/Tiles/HexTile.cs" Line="21" Column="12" />
+      <File FileName="Assets/Scripts/Control/StandardRuleSet.cs" Line="60" Column="52" />
+      <File FileName="Assets/Scripts/Control/BreakoutController.cs" Line="49" Column="92" />
+      <File FileName="Assets/Scripts/Control/SiegeController.cs" Line="89" Column="15" />
       <File FileName="Assets/Scripts/UI/PlayerUI.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Tiles/HexBoard.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Tiles/BoardSelector.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/UI/TutorialPanel.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/UI/NotificationPanel.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/UI/TutorialMenu.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/UI/GameMenu.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Control/BreakoutController.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/UI/ChallengePanel.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Control/SiegeController.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Players/AIPlayer.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Control/SacrificeController.cs" Line="51" Column="60" />
+      <File FileName="Assets/Scripts/UI/SacrificePlayerUI.cs" Line="8" Column="2" />
       <File FileName="Assets/Scripts/Players/AIStrategy.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Animations/SpriteAnimator.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Control/ConquestController.cs" Line="81" Column="60" />
+      <File FileName="Assets/Scripts/Control/CaptureController.cs" Line="48" Column="103" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

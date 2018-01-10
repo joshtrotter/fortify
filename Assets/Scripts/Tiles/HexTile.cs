@@ -28,7 +28,7 @@ public class HexTile : MonoBehaviour {
 	private bool activated = true;
 
     void Awake()
-    {
+    {		
 		tileAnimator = gameObject.GetComponent<SpriteAnimator> ();
     }
 
@@ -40,9 +40,9 @@ public class HexTile : MonoBehaviour {
     }
 
 	public void Initialise()
-	{
+	{		
 		SoundController.INSTANCE.PlayClaim ();
-		tileAnimator.AnimateExpand (Vector3.zero, Vector3.one, 0.2f, () => {});
+		tileAnimator.AnimateExpand (Vector3.zero, Vector3.one, 0.2f, () => {GetComponent<PolygonCollider2D>().enabled = true;});
 	}
 
 	public void SetToState(TileState state, Player owner, Sprite sprite, bool activated)
