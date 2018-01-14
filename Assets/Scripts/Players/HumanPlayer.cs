@@ -2,6 +2,8 @@
 
 public class HumanPlayer : Player, TileSelectionListener {
 
+	private bool lockMovement = false;
+
     public override void StartTurn()
     {
 		EventBus.INSTANCE.RegisterTileSelectionListener (this);
@@ -9,14 +11,17 @@ public class HumanPlayer : Player, TileSelectionListener {
 
     public override void OnTileSelected(HexTile tile)
     {
-        if (ValidateTileSelection(tile))
-        {
-            PlayTile(tile);
-        }
+		if (!lockMovement) {
+			if (ValidateTileSelection (tile)) {			
+				lockMovement = true;
+				PlayTile (tile);
+			}
+		}
     }
 
     public override void EndTurn()
-    {
+    {		
+		lockMovement = false;
 		EventBus.INSTANCE.DeregisterTileSelectionListener (this);
         base.EndTurn();
     }
