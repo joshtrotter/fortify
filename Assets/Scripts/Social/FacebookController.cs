@@ -37,12 +37,8 @@ public class FacebookController : MonoBehaviour {
 	}
 
 	public void Share() {
-		FB.FeedShare (
-			"",
-			new Uri ("https://joshtrotter.github.io/fortify"),
-			"Fortify",
-			"Fortify Caption",
-			"Fortify Description",
+		FB.ShareLink (
+			new Uri ("https://www.facebook.com/games/?fbs=-1&app_id=175548269720146&preview=1"),
 			callback: ShareCallback
 		);
 	}
