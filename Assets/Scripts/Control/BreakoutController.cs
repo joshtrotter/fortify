@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Facebook.Unity;
 
 public class BreakoutController : MonoBehaviour, EndTurnListener, BoardReadyListener {
 
@@ -53,6 +54,7 @@ public class BreakoutController : MonoBehaviour, EndTurnListener, BoardReadyList
 
 	public void OnChallengeAccepted()
 	{
+		FB.LogAppEvent ("StartBreakoutChallenge");
 		challengePanel.Hide (() => {player1.StartTurn (); EventBus.INSTANCE.NotifyCoinFlip(player1);});
 	}
 
@@ -79,6 +81,7 @@ public class BreakoutController : MonoBehaviour, EndTurnListener, BoardReadyList
 		List<HexTile> path1 = new PathTester ().findConnection (player1, source, dest1);
 		List<HexTile> path2 = new PathTester ().findConnection (player1, source, dest2);
 
+		Dictionary<string, object> eventParams = new Dictionary<string, object> ();
 		if (path1 != null || path2 != null)
 		{
 			foreach (HexTile tile in board.Tiles()) {
@@ -88,11 +91,14 @@ public class BreakoutController : MonoBehaviour, EndTurnListener, BoardReadyList
 					tile.Deactivate(() => {});
 				}
 			}
+			eventParams ["Outcome"] = "Success";
 			notificationPanel.Reveal ("CHALLENGE COMPLETED!", () => {}, 0.25f, 0.15f, true);
 		} else
 		{
+			eventParams ["Outcome"] = "Failure";
 			notificationPanel.Reveal ("TRY AGAIN!", () => {}, 0f, 0.15f, true);
 		}
+		FB.LogAppEvent ("CompleteBreakoutChallenge", parameters: eventParams);
 	}
 
 }

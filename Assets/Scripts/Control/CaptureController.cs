@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Facebook.Unity;
 
 public class CaptureController : MonoBehaviour, CoinFlipListener, EndTurnListener, BoardReadyListener {
 
@@ -54,6 +55,7 @@ public class CaptureController : MonoBehaviour, CoinFlipListener, EndTurnListene
 
 	public void OnChallengeAccepted()
 	{
+		FB.LogAppEvent ("StartOverturnChallenge");
 		challengePanel.Hide (() => {coin.Toss (player1, player2);});
 	}
 
@@ -82,13 +84,17 @@ public class CaptureController : MonoBehaviour, CoinFlipListener, EndTurnListene
 
 	private void DisplayEndOfGame()
 	{
+		Dictionary<string, object> eventParams = new Dictionary<string, object> ();
 		if (player1.ClaimedTileScore () == capturePoints)
 		{
+			eventParams ["Outcome"] = "Success";
 			notificationPanel.Reveal ("CHALLENGE COMPLETED!", () => {}, 0f, 0.15f, true);
 		} else
 		{
+			eventParams ["Outcome"] = "Failure";
 			notificationPanel.Reveal ("TRY AGAIN!", () => {}, 0f, 0.15f, true);
 		}
+		FB.LogAppEvent ("CompleteOverturnChallenge", parameters: eventParams);
 	}
 
 }

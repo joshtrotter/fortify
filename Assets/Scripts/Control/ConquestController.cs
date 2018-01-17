@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Facebook.Unity;
 
 public class ConquestController : MonoBehaviour, CoinFlipListener, EndTurnListener, BoardReadyListener {
 
@@ -50,6 +51,7 @@ public class ConquestController : MonoBehaviour, CoinFlipListener, EndTurnListen
 
 	public void OnChallengeAccepted()
 	{
+		FB.LogAppEvent ("StartConquestChallenge");
 		challengePanel.Hide (() => {coin.Toss (player1, player2);});
 	}
 
@@ -78,13 +80,17 @@ public class ConquestController : MonoBehaviour, CoinFlipListener, EndTurnListen
 
 	private void DisplayEndOfGame()
 	{
+		Dictionary<string, object> eventParams = new Dictionary<string, object> ();
 		if (player1.ClaimedTileScore() > player2.ClaimedTileScore())
 		{
+			eventParams ["Outcome"] = "Success";
 			notificationPanel.Reveal ("CHALLENGE COMPLETED!", () => {}, 0f, 0.15f, true);
 		} else
 		{
+			eventParams ["Outcome"] = "Failure";
 			notificationPanel.Reveal ("TRY AGAIN!", () => {}, 0f, 0.15f, true);
 		}
+		FB.LogAppEvent ("CompleteConquestChallenge", parameters: eventParams);
 	}
 
 }

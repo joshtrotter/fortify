@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Facebook.Unity;
 
 public class SiegeController : MonoBehaviour, EndTurnListener, BoardReadyListener {
 
@@ -61,6 +62,7 @@ public class SiegeController : MonoBehaviour, EndTurnListener, BoardReadyListene
 
 	public void OnChallengeAccepted()
 	{
+		FB.LogAppEvent ("StartSiegeChallenge");
 		challengePanel.Hide (() => player1.StartTurn ());
 	}
 
@@ -86,13 +88,17 @@ public class SiegeController : MonoBehaviour, EndTurnListener, BoardReadyListene
 
 	private void DisplayEndOfGame()
 	{
+		Dictionary<string, object> eventParams = new Dictionary<string, object> ();
 		if (player2.ClaimedTileScore() == 0)
 		{
+			eventParams ["Outcome"] = "Success";
 			notificationPanel.Reveal ("CHALLENGE COMPLETED!", () => {}, 0f, 0.15f, true);
 		} else
 		{
+			eventParams ["Outcome"] = "Failure";
 			notificationPanel.Reveal ("TRY AGAIN!", () => {}, 0f, 0.15f, true);
 		}
+		FB.LogAppEvent ("CompleteSiegeChallenge", parameters: eventParams);
 	}
 
 }

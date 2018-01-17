@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Facebook.Unity;
 
 public class SettingsMenu : MonoBehaviour {
 
@@ -39,6 +40,7 @@ public class SettingsMenu : MonoBehaviour {
 		PlayerPrefs.SetInt (DIFFICULTY_KEY, (int)difficulty);
 		PlayerPrefs.Save ();
 		EventBus.INSTANCE.NotifyDifficultyChange ((int)difficulty);
+		FB.LogAppEvent ("DifficultyChanged", difficulty);
 	}
 
 	public void ToggleDisplay() {

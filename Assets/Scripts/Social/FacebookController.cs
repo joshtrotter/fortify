@@ -1,10 +1,24 @@
 ﻿using UnityEngine;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using Facebook.Unity;
 
 public class FacebookController : MonoBehaviour {
 
 	void Awake ()
+	{
+		InitApp ();	
+	}
+
+	void OnApplicationPause (bool pauseStatus)
+	{
+		if (!pauseStatus) {
+			InitApp();
+		}
+	}
+
+	private void InitApp () 
 	{
 		if (!FB.IsInitialized) {
 			// Initialize the Facebook SDK
@@ -38,20 +52,24 @@ public class FacebookController : MonoBehaviour {
 
 	public void Share() {
 		FB.ShareLink (
-			new Uri ("https://www.facebook.com/games/?fbs=-1&app_id=175548269720146&preview=1"),
+			new Uri ("https://www.facebook.com/games/?app_id=175548269720146"),
 			callback: ShareCallback
 		);
 	}
 
 	private void ShareCallback (IShareResult result) {
-		if (result.Cancelled || !String.IsNullOrEmpty(result.Error)) {
-			Debug.Log("ShareLink Error: "+result.Error);
-		} else if (!String.IsNullOrEmpty(result.PostId)) {
-			// Print post identifier of the shared content
-			Debug.Log(result.PostId);
+		Dictionary<string, object> shareEventParams = new Dictionary<string, object> ();
+
+		if (result.Cancelled) {
+			shareEventParams ["outcome"] = "Cancelled";
+		} else if (!String.IsNullOrEmpty (result.Error)) {
+			shareEventParams ["outcome"] = "Error";
+		} else if (!String.IsNullOrEmpty(result.PostId)) {				
+			shareEventParams ["outcome"] = "SuccessWithPostId";
 		} else {
-			// Share succeeded without postID
-			Debug.Log("ShareLink success!");
+			shareEventParams ["outcome"] = "Success";
 		}
+
+		FB.LogAppEvent ("Share", parameters: shareEventParams);
 	}
 }

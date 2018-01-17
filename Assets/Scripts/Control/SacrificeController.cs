@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Facebook.Unity;
 
 public class SacrificeController : MonoBehaviour, CoinFlipListener, EndTurnListener, BoardReadyListener {
 
@@ -48,6 +49,7 @@ public class SacrificeController : MonoBehaviour, CoinFlipListener, EndTurnListe
 
 	public void OnChallengeAccepted()
 	{
+		FB.LogAppEvent ("StartMartyrChallenge");
 		challengePanel.Hide (() => {coin.Toss (player1, player2);});
 	}
 
@@ -76,13 +78,17 @@ public class SacrificeController : MonoBehaviour, CoinFlipListener, EndTurnListe
 
 	private void DisplayEndOfGame()
 	{
+		Dictionary<string, object> eventParams = new Dictionary<string, object> ();
 		if (player1.SacrificeScore() > player2.SacrificeScore())
 		{
+			eventParams ["Outcome"] = "Success";
 			notificationPanel.Reveal ("CHALLENGE COMPLETED!", () => {}, 0f, 0.15f, true);
 		} else
 		{
+			eventParams ["Outcome"] = "Failure";
 			notificationPanel.Reveal ("TRY AGAIN!", () => {}, 0f, 0.15f, true);
 		}
+		FB.LogAppEvent ("CompleteMartyrChallenge", parameters: eventParams);
 	}
 
 }

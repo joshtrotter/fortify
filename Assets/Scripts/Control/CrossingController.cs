@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Facebook.Unity;
 
 public class CrossingController : MonoBehaviour, CoinFlipListener, EndTurnListener, BoardReadyListener {
 
@@ -51,6 +52,7 @@ public class CrossingController : MonoBehaviour, CoinFlipListener, EndTurnListen
 
 	public void OnChallengeAccepted()
 	{
+		FB.LogAppEvent ("StartCrossingChallenge");
 		challengePanel.Hide (() => {coin.Toss (player1, player2);});
 	}
 
@@ -97,13 +99,17 @@ public class CrossingController : MonoBehaviour, CoinFlipListener, EndTurnListen
 			}
 		}
 
+		Dictionary<string, object> eventParams = new Dictionary<string, object> ();
 		if (crossingScore == islands)
 		{
+			eventParams ["Outcome"] = "Success";
 			notificationPanel.Reveal ("CHALLENGE COMPLETED!", () => {}, 0f, 0.15f, true);
 		} else
 		{
+			eventParams ["Outcome"] = "Failure";
 			notificationPanel.Reveal ("TRY AGAIN!", () => {}, 0f, 0.15f, true);
 		}
+		FB.LogAppEvent ("CompleteCrossingChallenge", parameters: eventParams);
 	}
 
 }

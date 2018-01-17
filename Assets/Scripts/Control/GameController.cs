@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
+using Facebook.Unity;
 
 public class GameController : MonoBehaviour, EndTurnListener, CoinFlipListener, BoardReadyListener {
 
@@ -44,6 +46,7 @@ public class GameController : MonoBehaviour, EndTurnListener, CoinFlipListener, 
 
 	public void OnStartingPlayerChosen (Player player)
 	{
+		LogStartEvent ();
 		player.StartTurn();
 	}
     
@@ -52,6 +55,7 @@ public class GameController : MonoBehaviour, EndTurnListener, CoinFlipListener, 
         if (CheckForEndOfGame())
         {
             DisplayEndOfGame();
+			LogEndEvent ();
         } 
         else
         {
@@ -75,5 +79,30 @@ public class GameController : MonoBehaviour, EndTurnListener, CoinFlipListener, 
 			notificationPanel.Reveal (player2.PlayerName () + " WINS!", () => {}, 0f, 0.15f, true);
         }
     }
+
+	private void LogStartEvent()
+	{
+		if (player2.GetType() == typeof(AIPlayer)) {
+			FB.LogAppEvent ("StartSinglePlayerGame");
+		} else {
+			FB.LogAppEvent ("StartMultiPlayerGame");
+		}			
+	}
+
+	private void LogEndEvent()
+	{
+		Dictionary<string, object> eventParams = new Dictionary<string, object> ();
+		if (player1.ClaimedTileScore () > player2.ClaimedTileScore ()) {
+			eventParams ["Winner"] = player1.PlayerName();
+		} else {
+			eventParams ["Winner"] = player2.PlayerName();
+		}
+		
+		if (player2.GetType() == typeof(AIPlayer)) {
+			FB.LogAppEvent ("CompleteSinglePlayerGame", parameters: eventParams);
+		} else {
+			FB.LogAppEvent ("CompleteMultiPlayerGame", parameters: eventParams);
+		}			
+	}
 	
 }

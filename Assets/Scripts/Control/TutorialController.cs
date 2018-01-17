@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.SceneManagement;
+using Facebook.Unity;
 
 public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyListener {
 
@@ -60,6 +61,7 @@ public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyList
 
 	private void StartTutorial() 
 	{
+		LogTutorialEvent ("Started");
 		tutorialPanel.DisplayStep1 ();
 	}
 		
@@ -108,6 +110,7 @@ public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyList
 		step1Highlight.gameObject.SetActive(false);
 		gamePanel.Hide (() => {});
 		tutorialPanel.DisplayStep2 ();
+		LogTutorialEvent ("Step1Complete");
 	}
 
 	private void Step2() {
@@ -127,6 +130,7 @@ public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyList
 		}
 		tutorialState = 3;
 		tutorialPanel.DisplayStep3 ();
+		LogTutorialEvent ("Step2Complete");
 	}
 
 	private void Step3()
@@ -151,6 +155,7 @@ public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyList
 		}
 		step3Highlight.gameObject.SetActive(false);
 		gamePanel.Hide (() => StartCoroutine(Step4Delay(() => Step4())));
+		LogTutorialEvent ("Step3Complete");
 	}
 
 	private IEnumerator Step4Delay(Action onComplete) {
@@ -175,6 +180,7 @@ public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyList
 		}
 		tutorialState = 5;
 		tutorialPanel.DisplayStep5 ();
+		LogTutorialEvent ("Step4Complete");
 	}
 
 	private void Step5() {
@@ -199,6 +205,7 @@ public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyList
 		gamePanel.Hide (() => {});
 		tutorialState = 6;
 		tutorialPanel.DisplayStep6 ();
+		LogTutorialEvent ("Step5Complete");
 	}
 
 	private void Step6() {
@@ -218,6 +225,7 @@ public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyList
 		}
 		tutorialState = 7;
 		StartCoroutine(Step7Delay(() => Step7()));
+		LogTutorialEvent ("Step6Complete");
 	}
 
 	private IEnumerator Step7Delay(Action onComplete) {
@@ -246,6 +254,7 @@ public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyList
 		}
 		step7Highlight.gameObject.SetActive(false);
 		gamePanel.Hide (() => StartCoroutine(Step8Delay(() => Step8())));
+		LogTutorialEvent ("Step7Complete");
 	}
 
 	private IEnumerator Step8Delay(Action onComplete) {
@@ -270,6 +279,7 @@ public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyList
 		}
 		tutorialState = 9;
 		tutorialPanel.DisplayStep9 ();
+		LogTutorialEvent ("Step8Complete");
 	}
 
 	private void Step9() {
@@ -293,6 +303,7 @@ public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyList
 		}
 		step1Highlight.gameObject.SetActive(false);
 		gamePanel.Hide (() => Step10());
+		LogTutorialEvent ("Finished");
 	}
 
 	private void Step10() {
@@ -354,5 +365,12 @@ public class TutorialController : MonoBehaviour, EndTurnListener, BoardReadyList
 		{
 			gamePanel.Reveal (player2.PlayerName () + " WINS!", () => {}, 0f, 0.15f, true);
 		}
+	}
+
+	private void LogTutorialEvent(string stepName)
+	{
+		Dictionary<string, object> eventParams = new Dictionary<string, object> ();
+		eventParams ["Step"] = stepName;
+		FB.LogAppEvent ("TutorialStep", parameters: eventParams);				
 	}
 }
